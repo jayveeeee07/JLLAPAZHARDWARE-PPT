@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JL Lapaz Hardware Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ====== GLOBAL STYLES ====== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #1a2980;
+            --secondary-teal: #26d0ce;
+            --accent-orange: #ff6b35;
+            --light-gray: #f8f9fa;
+            --dark-gray: #333333;
+            --success-green: #28a745;
+            --warning-yellow: #ffc107;
+            --danger-red: #dc3545;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal));
+            color: var(--dark-gray);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ====== PRESENTATION CONTAINER ====== */
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slides-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background: white;
+            margin: 20px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            background: white;
+            transform: translateX(100%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .slide-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--primary-blue);
+            position: relative;
+        }
+
+        .slide-header h1 {
+            color: var(--primary-blue);
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .slide-header h2 {
+            color: var(--secondary-teal);
+            font-size: 1.8rem;
+            font-weight: 400;
+        }
+
+        .slide-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* ====== TEAM MEMBERS ====== */
+        .team-members {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .team-member {
+            background: var(--light-gray);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border-left: 5px solid var(--secondary-teal);
+            transition: var(--transition);
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        /* ====== FEATURE CARDS ====== */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            border-top: 5px solid var(--primary-blue);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .feature-card .icon {
+            font-size: 28px;
+            color: var(--secondary-teal);
+        }
+
+        /* ====== COMPARISON TABLES ====== */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .comparison-table th {
+            background: var(--primary-blue);
+            color: white;
+            padding: 18px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 16px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: var(--light-gray);
+        }
+
+        /* ====== CONTROLS ====== */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+
+        .nav-btn:hover {
+            background: var(--secondary-teal);
+            transform: translateY(-2px);
+        }
+
+        .slide-counter {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .presentation-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        /* ====== TITLE SLIDE ====== */
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal));
+            color: white;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-slide .slide-header {
+            border-bottom: 3px solid white;
+        }
+
+        .title-slide h1 {
+            color: white;
+            font-size: 3.5rem;
+        }
+
+        .title-slide h2 {
+            color: white;
+            font-size: 2.2rem;
+        }
+
+        /* ====== FLOWCHART STYLES ====== */
+        .flowchart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .flowchart-box {
+            background: var(--light-gray);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid var(--primary-blue);
+            font-family: monospace;
+            line-height: 2;
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .flow-step {
+            margin: 10px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .flow-step:before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--secondary-teal);
+            font-weight: bold;
+        }
+
+        /* ====== LAYOUT SYSTEM ====== */
+        .layout-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .layout-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--secondary-teal);
+        }
+
+        .layout-box h3 {
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* ====== RESPONSIVE DESIGN ====== */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 20px;
+            }
+            
+            .slide-header h1 {
+                font-size: 2rem;
+            }
+            
+            .slide-header h2 {
+                font-size: 1.4rem;
+            }
+            
+            .team-members {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .layout-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .flowchart-box {
+                font-size: 0.9rem;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .team-members {
+                grid-template-columns: 1fr;
+            }
+            
+            .slide-header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .nav-btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+
+        /* ====== UTILITY CLASSES ====== */
+        .highlight {
+            background: linear-gradient(120deg, rgba(38, 208, 206, 0.2) 0%, transparent 100%);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--secondary-teal);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--accent-orange);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: var(--dark-gray);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* ====== PROGRESS BAR ====== */
+        .progress-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary-teal), var(--primary-blue));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <div class="presentation-container">
+        <div class="slides-container">
+            <!-- SLIDE 1: TITLE -->
+            <div class="slide title-slide active" id="slide1">
+                <div class="slide-header">
+                    <h1>MANAGEMENT SYSTEM OF JL LAPAZ HARDWARE</h1>
+                    <h2>Sitio/Purok Dumanig, Brgy. Upper Mainit, Malungon, Sarangani Province</h2>
+                </div>
+                <div class="slide-content">
+                    <div style="text-align: center; margin: 40px 0;">
+                        <h3 style="color: white; margin-bottom: 30px; font-size: 1.8rem;">Presented by:</h3>
+                        <div class="team-members">
+                            <div class="team-member">Jayvee Caringal</div>
+                            <div class="team-member">Princess Loraine Padilla</div>
+                            <div class="team-member">Christian Lasponia</div>
+                            <div class="team-member">Mar Jhon Luyao</div>
+                            <div class="team-member">Arianne Shane Pales</div>
+                            <div class="team-member">Jenny Rose Indab</div>
+                            <div class="team-member">Dexie Jay Jolosjos</div>
+                            <div class="team-member">Lenie Mariano</div>
+                            <div class="team-member">Karl Jay Balolo</div>
+                            <div class="team-member">Cyrel Caballero</div>
+                            <div class="team-member">Michael Senope</div>
+                            <div class="team-member">Shaina Gean Bayawan</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 50px;">
+                        <div style="background: rgba(255, 255, 255, 0.2); padding: 25px; border-radius: 15px; display: inline-block;">
+                            <h3 style="color: white; margin-bottom: 10px;">Capstone Project Presentation</h3>
+                            <h2 style="color: white; font-size: 2rem; font-weight: 700;">JANUARY 2026</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 2: PROPOSED TITLE -->
+            <div class="slide" id="slide2">
+                <div class="slide-header">
+                    <h1>PROPOSED TITLE</h1>
+                    <h2>Smartphone-Based Management System</h2>
+                </div>
+                <div class="slide-content">
+                    <div style="text-align: center; margin: 40px 0;">
+                        <div style="background: var(--light-gray); padding: 30px; border-radius: 15px; border: 3px solid var(--primary-blue);">
+                            <h3 style="color: var(--primary-blue); font-size: 1.8rem; margin-bottom: 20px;">
+                                Management System of JL Lapaz Hardware
+                            </h3>
+                            <p style="font-size: 1.2rem; line-height: 1.6; color: var(--dark-gray);">
+                                <i class="fas fa-map-marker-alt" style="color: var(--secondary-teal);"></i>
+                                Sitio/Purok Dumanig, Brgy. Upper Mainit<br>
+                                Malungon, Sarangani Province
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3><i class="fas fa-mobile-alt icon"></i> Key Technology</h3>
+                        <p style="font-size: 1.1rem; line-height: 1.6;">
+                            <strong>Smartphone-Based Solution:</strong> Developed as a mobile application for Android devices, 
+                            ensuring accessibility and convenience for daily store operations.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" style="margin-top: 20px;">
+                        <h3><i class="fas fa-bullseye icon"></i> Core Purpose</h3>
+                        <p style="font-size: 1.1rem; line-height: 1.6;">
+                            To automate and streamline hardware store operations, replacing manual record-keeping 
+                            with efficient digital processes that reduce errors and improve efficiency.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 3: PRIMARY OBJECTIVE -->
+            <div class="slide" id="slide3">
+                <div class="slide-header">
+                    <h1>PRIMARY OBJECTIVE</h1>
+                    <h2>System Overview & Goals</h2>
+                </div>
+                <div class="slide-content">
+                    <div style="background: linear-gradient(135deg, #e8f4fd, white); padding: 30px; border-radius: 15px; margin-bottom: 30px;">
+                        <h3 style="color: var(--primary-blue); text-align: center; margin-bottom: 20px; font-size: 1.8rem;">
+                            Primary Objective
+                        </h3>
+                        <p style="font-size: 1.3rem; line-height: 1.8; text-align: center; font-weight: 600;">
+                            To develop a comprehensive Smartphone-based management system that automates and streamlines 
+                            the daily operations of hardware stores, replacing error-prone manual processes with 
+                            efficient digital solutions.
+                        </p>
+                    </div>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h3><i class="fas fa-clock icon"></i> Time Reduction</h3>
+                            <p>Replace time-consuming manual processes with fast digital operations</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3><i class="fas fa-calculator icon"></i> Error Elimination</h3>
+                            <p>Remove human calculation errors in pricing and totals</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3><i class="fas fa-database icon"></i> Data Management</h3>
+                            <p>Organize all business data in a centralized digital system</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3><i class="fas fa-chart-line icon"></i> Business Intelligence</h3>
+                            <p>Provide insights for better decision-making</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 4: SPECIFIC OBJECTIVES -->
+            <div class="slide" id="slide4">
+                <div class="slide-header">
+                    <h1>SPECIFIC OBJECTIVES</h1>
+                    <h2>Detailed Goals and Targets</h2>
+                </div>
+                <div class="slide-content">
+                    <div class="feature-card">
+                        <h3><i class="fas fa-tachometer-alt icon"></i> 1. Operational Efficiency</h3>
+                        <ul style="margin-top: 15px; padding-left: 25px; line-height: 1.8;">
+                            <li>To reduce transaction processing time by <span class="highlight">70%</span> compared to manual methods</li>
+                            <li>To automate inventory tracking with real-time stock updates</li>
+                            <li>To eliminate calculation errors in pricing and totals</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card" style="margin-top: 20px;">
+                        <h3><i class="fas fa-boxes icon"></i> 2. Inventory Control</h3>
+                        <ul style="margin-top: 15px; padding-left: 25px; line-height: 1.8;">
+                            <li>To maintain accurate stock levels across all product categories</li>
+                            <li>To implement automatic reordering alerts for low-stock items</li>
+                            <li>To track product movement patterns and identify fast/slow-moving items</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card" style="margin-top: 20px;">
+                        <h3><i class="fas fa-chart-bar icon"></i> 3. Business Intelligence</h3>
+                        <ul style="margin-top: 15px; padding-left: 25px; line-height: 1.8;">
+                            <li>To generate daily, weekly, and monthly sales reports</li>
+                            <li>To provide profit analysis and revenue tracking</li>
+                            <li>To create inventory valuation reports</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card" style="margin-top: 20px;">
+                        <h3><i class="fas fa-users icon"></i> 4. Customer Service Enhancement</h3>
+                        <ul style="margin-top: 15px; padding-left: 25px; line-height: 1.8;">
+                            <li>To enable faster checkout processing</li>
+                            <li>To maintain customer purchase history</li>
+                            <li>To generate professional receipts and invoices</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card" style="margin-top: 20px;">
+                        <h3><i class="fas fa-shield-alt icon"></i> 5. Data Security and Management</h3>
+                        <ul style="margin-top: 15px; padding-left: 25px; line-height: 1.8;">
+                            <li>To secure business data through user authentication</li>
+                            <li>To implement regular automated data backups</li>
+                            <li>To maintain comprehensive audit trails of all transactions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 5: SCOPE - CORE MODULES -->
+            <div class="slide" id="slide5">
+                <div class="slide-header">
+                    <h1>SCOPE AND LIMITATIONS</h1>
+                    <h2>Core Management Modules</h2>
+                </div>
+                <div class="slide-content">
+                    <h3 style="color: var(--primary-blue); margin-bottom: 20px;">1. Core Management Modules:</h3>
+                    
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h3><i class="fas fa-box-open icon"></i> A. PRODUCT MANAGEMENT</h3>
+                            <ul style="margin-top: 10px; line-height: 1.6;">
+                                <li>Add/Edit/Delete products</li>
+                                <li>Categorize items (Tools, Electrical, Plumbing, etc.)</li>
+                                <li>Set reorder levels and pricing</li>
+                                <li>Upload product images</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-card">
+                            <h3><i class="fas fa-clipboard-list icon"></i> B. INVENTORY CONTROL</h3>
+                            <ul style="margin-top: 10px; line-height: 1.6;">
+                                <li>Real-time stock level tracking</li>
+                                <li>Automatic deduction after sales</li>
+                                <li>Manual stock adjustments</li>
+                                <li>Stock movement history</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-card">
+                            <h3><i class="fas fa-cash-register icon"></i> C. SALES PROCESSING</h3>
+                            <ul style="margin-top: 10px; line-height: 1.6;">
+                                <li>Point-of-Sale (POS) interface</li>
+                                <li>Bill generation with tax calculation</li>
+                                <li>Receipt printing</li>
+                                <li>Return/Refund processing</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-card">
+                            <h3><i class="fas fa-chart-pie icon"></i> D. REPORTING SYSTEM</h3>
+                            <ul style="margin-top: 10px; line-height: 1.6;">
+                                <li>Sales reports (daily, weekly, monthly)</li>
+                                <li>Inventory reports</li>
+                                <li>Profit/Loss statements</li>
+                                <li>Customer purchase history</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 6: SCOPE - USER & CUSTOMER MANAGEMENT -->
+            <div class="slide" id="slide6">
+                <div class="slide-header">
+                    <h1>SCOPE AND LIMITATIONS</h1>
+                    <h2>Additional Management Features</h2>
+                </div>
+                <div class="slide-content">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px;">
+                        <div class="feature-card">
+                            <h3><i class="fas fa-user-shield icon"></i> 2. User Management</h3>
+                            <ul style="margin-top: 15px; line-height: 1.8;">
+                                <li>Role-based access (Admin, Manager, Cashier)</li>
+                                <li>Login/logout with password protection</li>
+                                <li>User activity logs</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-card">
+                            <h3><i class="fas fa-users icon"></i> 3. Customer Management</h3>
+                            <ul style="margin-top: 15px; line-height: 1.8;">
+                                <li>Customer database maintenance</li>
+                                <li>Purchase history tracking</li>
+                                <li>Basic loyalty tracking</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--primary-blue); margin: 30px 0 20px 0;">Advanced Features NOT Included:</h3>
+                    
+                    <div style="background: #fff0f0; padding: 20px; border-radius: 10px; border-left: 5px solid var(--danger-red);">
+                        <h4 style="color: var(--danger-red); margin-bottom: 15px;">
+                            <i class="fas fa-times-circle"></i> 1. Advanced Features Excluded
+                        </h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <div>• NO online ordering or e-commerce website</div>
+                            <div>• NO barcode scanning integration</div>
+                            <div>• NO RFID inventory tracking</div>
+                            <div>• NO supplier portal integration</div>
+                            <div>• NO accounting system integration</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 7: SCOPE - LIMITATIONS -->
+            <div class="slide" id="slide7">
+                <div class="slide-header">
+                    <h1>SCOPE AND LIMITATIONS</h1>
+                    <h2>Technical & Business Limitations</h2>
+                </div>
+                <div class="slide-content">
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: var(--primary-blue); margin-bottom: 15px;">
+                            <i class="fas fa-laptop-code"></i> 2. Technical Limitations
+                        </h3>
+                        <div style="background: #fff8e1; padding: 20px; border-radius: 10px; border-left: 5px solid var(--warning-yellow);">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                                <div>• Single-store operation only (no multi-branch support)</div>
+                                <div>• No cloud synchronization or backup</div>
+                                <div>• No real-time online payment processing</div>
+                                <div>• No API integration with external systems</div>
+                                <div>• Offline operation only (no internet-dependent features)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 style="color: var(--primary-blue); margin-bottom: 15px;">
+                            <i class="fas fa-business-time"></i> 3. Business Limitations
+                        </h3>
+                        <div style="background: #e8f4fd; padding: 20px; border-radius: 10px; border-left: 5px solid var(--primary-blue);">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                                <div>• No rental equipment management</div>
+                                <div>• No project/quotation management</div>
+                                <div>• No delivery tracking system</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 40px; text-align: center;">
+                        <div style="background: var(--light-gray); padding: 25px; border-radius: 12px; display: inline-block;">
+                            <h4 style="color: var(--primary-blue); margin-bottom: 10px;">Scope Boundaries</h4>
+                            <p style="font-weight: 600;">Clear definition ensures focused development<br>and successful project completion</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 8: PROPOSED LAYOUT SYSTEM -->
+            <div class="slide" id="slide8">
+                <div class="slide-header">
+                    <h1>PROPOSED LAYOUT SYSTEM</h1>
+                    <h2>Physical and Interface Design</h2>
+                </div>
+                <div class="slide-content">
+                    <div class="layout-container">
+                        <div class="layout-box">
+                            <h3><i class="fas fa-building icon"></i> Physical Layout</h3>
+                            <div style="background: var(--light-gray); padding: 20px; border-radius: 10px; margin-top: 15px;">
+                                <p style="font-weight: 600; color: var(--primary-blue); margin-bottom: 15px;">
+                                    Store Setup for System Implementation:
+                                </p>
+                                <ul style="line-height: 1.8;">
+                                    <li>Central smartphone/tablet at counter</li>
+                                    <li>Optional Bluetooth receipt printer</li>
+                                    <li>Designated area for inventory checking</li>
+                                    <li>Secure storage for backup devices</li>
+                                    <li>Power source for continuous operation</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="layout-box">
+                            <h3><i class="fas fa-desktop icon"></i> User Interface Layout</h3>
+                            <div style="background: var(--light-gray); padding: 20px; border-radius: 10px; margin-top: 15px;">
+                                <p style="font-weight: 600; color: var(--primary-blue); margin-bottom: 15px;">
+                                    Mobile Application Interface:
+                                </p>
+                                <ul style="line-height: 1.8;">
+                                    <li>Login screen with role-based access</li>
+                                    <li>Main dashboard with quick access buttons</li>
+                                    <li>POS interface for sales transactions</li>
+                                    <li>Inventory management screens</li>
+                                    <li>Report generation interface</li>
+                                    <li>Settings and backup options</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 40px;">
+                        <div class="stat-box" style="display: inline-block; margin: 0 15px;">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">Mobile-Optimized</div>
+                        </div>
+                        <div class="stat-box" style="display: inline-block; margin: 0 15px;">
+                            <div class="stat-number">3</div>
+                            <div class="stat-label">User Roles</div>
+                        </div>
+                        <div class="stat-box" style="display: inline-block; margin: 0 15px;">
+                            <div class="stat-number">5</div>
+                            <div class="stat-label">Main Modules</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 9: FLOWCHART - MAIN SYSTEM FLOW -->
+            <div class="slide" id="slide9">
+                <div class="slide-header">
+                    <h1>SYSTEM FLOWCHARTS</h1>
+                    <h2>1. MAIN SYSTEM FLOW</h2>
+                </div>
+                <div class="slide-content">
+                    <div class="flowchart-container">
+                        <div class="flowchart-box">
+                            <div style="text-align: center; margin-bottom: 20px; color: var(--primary-blue); font-weight: bold;">
+                                MAIN SYSTEM FLOW
+                            </div>
+                            
+                            <div class="flow-step">START - Application Launch</div>
+                            <div class="flow-step">Display Login Screen</div>
+                            <div class="flow-step">User Authentication Check</div>
+                            <div class="flow-step">Load Role-Based Dashboard</div>
+                            <div class="flow-step">User Selects Function:</div>
+                            
+                            <div style="margin-left: 30px;">
+                                <div class="flow-step">Sales Processing</div>
+                                <div class="flow-step">Inventory Management</div>
+                                <div class="flow-step">Report Generation</div>
+                                <div class="flow-step">User Management</div>
+                            </div>
+                            
+                            <div class="flow-step">Execute Selected Function</div>
+                            <div class="flow-step">Save Data to Database</div>
+                            <div class="flow-step">Return to Dashboard</div>
+                            <div class="flow-step">Logout & Secure Session</div>
+                            <div class="flow-step">END - Application Close</div>
+                            
+                            <div style="margin-top: 30px; text-align: center; font-style: italic; color: var(--secondary-teal);">
+                                Continuous loop for daily operations
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div class="badge">Secure Login</div>
+                        <div class="badge">Role-Based Access</div>
+                        <div class="badge">Data Protection</div>
+                        <div class="badge">Audit Trail</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 10: FLOWCHART - SALES TRANSACTION -->
+            <div class="slide" id="slide10">
+                <div class="slide-header">
+                    <h1>SYSTEM FLOWCHARTS</h1>
+                    <h2>2. SALES TRANSACTION FLOW</h2>
+                </div>
+                <div class="slide-content">
+                    <div class="flowchart-container">
+                        <div class="flowchart-box">
+                            <div style="text-align: center; margin-bottom: 20px; color: var(--primary-blue); font-weight: bold;">
+                                SALES TRANSACTION FLOW
+                            </div>
+                            
+                            <div class="flow-step">START - New Sale</div>
+                            <div class="flow-step">Scan/Search Product</div>
+                            <div class="flow-step">Check Stock Availability</div>
+                            
+                            <div style="margin-left: 30px;">
+                                <div class="flow-step">If Available: Add to Cart</div>
+                                <div class="flow-step">If Low Stock: Show Warning</div>
+                                <div class="flow-step">If Out of Stock: Show Error</div>
+                            </div>
+                            
+                            <div class="flow-step">Calculate Subtotal</div>
+                            <div class="flow-step">Apply Discounts (Optional)</div>
+                            <div class="flow-step">Calculate Tax</div>
+                            <div class="flow-step">Display Final Total</div>
+                            <div class="flow-step">Process Payment</div>
+                            
+                            <div style="margin-left: 30px;">
+                                <div class="flow-step">Cash: Calculate Change</div>
+                                <div class="flow-step">Credit: Record for Later</div>
+                            </div>
+                            
+                            <div class="flow-step">Generate Receipt/Invoice</div>
+                            <div class="flow-step">Update Inventory Automatically</div>
+                            <div class="flow-step">Save Transaction Record</div>
+                            <div class="flow-step">END - Return to POS Screen</div>
+                            
+                            <div style="margin-top: 30px; text-align: center; font-style: italic; color: var(--secondary-teal);">
+                                Average time: 1-2 minutes per transaction
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div class="badge">Real-time Stock Check</div>
+                        <div class="badge">Automatic Calculation</div>
+                        <div class="badge">Inventory Update</div>
+                        <div class="badge">Receipt Generation</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 11: FLOWCHART - INVENTORY MANAGEMENT -->
+            <div class="slide" id="slide11">
+                <div class="slide-header">
+                    <h1>SYSTEM FLOWCHARTS</h1>
+                    <h2>3. INVENTORY MANAGEMENT FLOW</h2>
+                </div>
+                <div class="slide-content">
+                    <div class="flowchart-container">
+                        <div class="flowchart-box">
+                            <div style="text-align: center; margin-bottom: 20px; color: var(--primary-blue); font-weight: bold;">
+                                INVENTORY MANAGEMENT FLOW
+                            </div>
+                            
+                            <div class="flow-step">START - Inventory Module</div>
+                            <div class="flow-step">Select Action Type:</div>
+                            
+                            <div style="margin-left: 30px;">
+                                <div class="flow-step">Add New Product</div>
+                                <div class="flow-step">Update Stock Quantity</div>
+                                <div class="flow-step">Edit Product Details</div>
+                                <div class="flow-step">Delete/Discontinue Product</div>
+                            </div>
+                            
+                            <div class="flow-step">Enter/Modify Product Information</div>
+                            
+                            <div style="margin-left: 30px;">
+                                <div class="flow-step">Product Name & Description</div>
+                                <div class="flow-step">Category Classification</div>
+                                <div class="flow-step">Pricing (Cost & Selling)</div>
+                                <div class="flow-step">Stock Levels & Reorder Points</div>
+                            </div>
+                            
+                            <div class="flow-step">Validate Data Entry</div>
+                            <div class="flow-step">Save to Database</div>
+                            <div class="flow-step">Check for Low Stock Alerts</div>
+                            
+                            <div style="margin-left: 30px;">
+                                <div class="flow-step">If Low Stock: Generate Alert</div>
+                                <div class="flow-step">If Stock OK: Continue</div>
+                            </div>
+                            
+                            <div class="flow-step">Update Stock Movement Log</div>
+                            <div class="flow-step">END - Return to Inventory Menu</div>
+                            
+                            <div style="margin-top: 30px; text-align: center; font-style: italic; color: var(--secondary-teal);">
+                                Real-time tracking with automatic alerts
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div class="badge">Real-time Updates</div>
+                        <div class="badge">Low Stock Alerts</div>
+                        <div class="badge">Product Tracking</div>
+                        <div class="badge">Movement History</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 12: FLOWCHART - REPORT GENERATION -->
+            <div class="slide" id="slide12">
+                <div class="slide-header">
+                    <h1>SYSTEM FLOWCHARTS</h1>
+                    <h2>4. REPORT GENERATION FLOW</h2>
+                </div>
+                <div class="slide-content">
+                    <div class="flowchart-container">
+                        <div class="flowchart-box">
+                            <div style="text-align: center; margin-bottom: 20px; color: var(--primary-blue); font-weight: bold;">
+                                REPORT GENERATION FLOW
+                            </div>
+                            
+                            <div class="flow-step">START - Reports Module</div>
+                            <div class="flow-step">Select Report Type:</div>
+                            
+                            <div style="margin-left: 30px;">
+                                <div class="flow-step">Sales Reports</div>
+                                <div class="flow-step">Inventory Reports</div>
+                                <div class="flow-step">Financial Reports</div>
+                                <div class="flow-step">Customer Reports</div>
+                            </div>
+                            
+                            <div class="flow-step">Set Report Parameters</div>
+                            
+                            <div style="margin-left: 30px;">
+                                <div class="flow-step">Date Range Selection</div>
+                                <div class="flow-step">Category Filters</div>
+                                <div class="flow-step">Product Selection</div>
+                                <div class="flow-step">Format Preferences</div>
+                            </div>
+                            
+                            <div class="flow-step">Generate Report</div>
+                            <div class="flow-step">Query Database</div>
+                            <div class="flow-step">Process and Format Data</div>
+                            <div class="flow-step">Display Report Preview</div>
+                            <div class="flow-step">Select Output Option:</div>
+                            
+                            <div style="margin-left: 30px;">
+                                <div class="flow-step">View on Screen</div>
+                                <div class="flow-step">Print Report</div>
+                                <div class="flow-step">Export to PDF/Excel</div>
+                                <div class="flow-step">Email Report</div>
+                            </div>
+                            
+                            <div class="flow-step">Save Report Template (Optional)</div>
+                            <div class="flow-step">END - Return to Reports Menu</div>
+                            
+                            <div style="margin-top: 30px; text-align: center; font-style: italic; color: var(--secondary-teal);">
+                                Instant reports for business decision-making
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div class="badge">Multiple Formats</div>
+                        <div class="badge">Custom Filters</div>
+                        <div class="badge">Export Options</div>
+                        <div class="badge">Quick Generation</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 13: CONCLUSION -->
+            <div class="slide" id="slide13">
+                <div class="slide-header">
+                    <h1>CONCLUSION</h1>
+                    <h2>System Benefits and Implementation</h2>
+                </div>
+                <div class="slide-content">
+                    <div class="feature-card">
+                        <h3><i class="fas fa-check-circle icon"></i> Expected Outcomes</h3>
+                        <ul style="margin-top: 15px; line-height: 1.8;">
+                            <li><span class="highlight">70% faster</span> transaction processing</li>
+                            <li><span class="highlight">100% accurate</span> inventory tracking</li>
+                            <li><span class="highlight">Zero calculation</span> errors in sales</li>
+                            <li><span class="highlight">Real-time</span> business insights</li>
+                            <li><span class="highlight">Improved</span> customer satisfaction</li>
+                        </ul>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 30px;">
+                        <div class="stat-box">
+                            <div class="stat-number">₱0</div>
+                            <div class="stat-label">Software Cost</div>
+                            <p style="margin-top: 10px; font-size: 0.9rem;">Free for JL Lapaz Hardware</p>
+                        </div>
+                        
+                        <div class="stat-box">
+                            <div class="stat-number">30min</div>
+                            <div class="stat-label">Training Time</div>
+                            <p style="margin-top: 10px; font-size: 0.9rem;">Easy to learn and use</p>
+                        </div>
+                        
+                        <div class="stat-box">
+                            <div class="stat-number">24/7</div>
+                            <div class="stat-label">Operation</div>
+                            <p style="margin-top: 10px; font-size: 0.9rem;">Works anytime, anywhere</p>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 40px;">
+                        <div style="background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal)); 
+                                  color: white; padding: 30px; border-radius: 15px; display: inline-block;">
+                            <h3 style="margin-bottom: 15px;">Ready for Implementation</h3>
+                            <p style="font-size: 1.1rem;">
+                                Transforming JL Lapaz Hardware into a modern, efficient, and profitable business
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 14: THANK YOU -->
+            <div class="slide title-slide" id="slide14">
+                <div class="slide-header">
+                    <h1>THANK YOU</h1>
+                    <h2>Questions & Discussion</h2>
+                </div>
+                <div class="slide-content">
+                    <div style="text-align: center; margin: 50px 0;">
+                        <div style="font-size: 4rem; margin-bottom: 30px;">🙏</div>
+                        <h3 style="color: white; margin-bottom: 30px;">We appreciate your time and attention</h3>
+                        
+                        <div style="background: rgba(255,255,255,0.2); padding: 30px; border-radius: 10px; max-width: 600px; margin: 0 auto;">
+                            <h4 style="color: white; margin-bottom: 20px;">Project Team</h4>
+                            <div style="color: white; line-height: 1.8;">
+                                <p>12 dedicated team members</p>
+                                <p>7 months of development</p>
+                                <p>Comprehensive testing completed</p>
+                                <p>Ready for deployment</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 50px;">
+                        <h4 style="color: white;">JL LAPAZ HARDWARE MANAGEMENT SYSTEM</h4>
+                        <p style="color: white; margin-top: 10px;">
+                            A Smartphone-Based Solution for Modern Hardware Store Operations
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- CONTROLS -->
+        <div class="controls">
+            <div class="presentation-title">
+                JL Lapaz Hardware Management System
+            </div>
+            <div class="slide-counter">
+                <button class="nav-btn" id="prevBtn">
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <span style="margin: 0 20px;">
+                    Slide <span id="currentSlide">1</span> of <span id="totalSlides">14</span>
+                </span>
+                <button class="nav-btn" id="nextBtn">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            <div>
+                <button class="nav-btn" id="fullscreenBtn">
+                    <i class="fas fa-expand"></i> Fullscreen
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Slides management
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentSlide = 0;
+
+        // Update slide counter
+        function updateSlideCounter() {
+            document.getElementById('currentSlide').textContent = currentSlide + 1;
+            document.getElementById('totalSlides').textContent = totalSlides;
+            updateProgressBar();
+        }
+
+        // Update progress bar
+        function updateProgressBar() {
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        // Show specific slide
+        function showSlide(index) {
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+            slides[index].classList.add('active');
+            currentSlide = index;
+            updateSlideCounter();
+        }
+
+        // Next slide
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        });
+
+        // Previous slide
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                e.preventDefault();
+                if (currentSlide < totalSlides - 1) {
+                    showSlide(currentSlide + 1);
+                }
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                if (currentSlide > 0) {
+                    showSlide(currentSlide - 1);
+                }
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                showSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                showSlide(totalSlides - 1);
+            }
+        });
+
+        // Fullscreen functionality
+        document.getElementById('fullscreenBtn').addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Fullscreen error: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        });
+
+        // Touch swipe for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const difference = touchStartX - touchEndX;
+
+            if (Math.abs(difference) > swipeThreshold) {
+                if (difference > 0) {
+                    // Swipe left - next slide
+                    if (currentSlide < totalSlides - 1) {
+                        showSlide(currentSlide + 1);
+                    }
+                } else {
+                    // Swipe right - previous slide
+                    if (currentSlide > 0) {
+                        showSlide(currentSlide - 1);
+                    }
+                }
+            }
+        }
+
+        // Initialize
+        updateSlideCounter();
+
+        // Add slide numbers
+        slides.forEach((slide, index) => {
+            const slideNumber = document.createElement('div');
+            slideNumber.style.position = 'absolute';
+            slideNumber.style.bottom = '15px';
+            slideNumber.style.right = '25px';
+            slideNumber.style.color = '#666';
+            slideNumber.style.fontSize = '14px';
+            slideNumber.style.fontWeight = '600';
+            slideNumber.textContent = `Slide ${index + 1}`;
+            slide.appendChild(slideNumber);
+        });
+
+        // Add animation delay to elements
+        document.querySelectorAll('.slide-content > *').forEach((el, index) => {
+            el.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Initialize first slide
+        showSlide(0);
+    </script>
+</body>
+</html>
