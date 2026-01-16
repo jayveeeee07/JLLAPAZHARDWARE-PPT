@@ -229,6 +229,7 @@
             margin-right: 10px;
         }
         
+        /* Updated Zoom Modal Styles */
         .zoom-modal {
             display: none;
             position: fixed;
@@ -236,19 +237,86 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.9);
+            background-color: rgba(0, 0, 0, 0);
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            opacity: 0;
+            transition: background-color 0.3s ease, opacity 0.3s ease;
         }
         
         .zoom-modal.active {
             display: flex;
+            background-color: rgba(0, 0, 0, 0.9);
+            opacity: 1;
+            animation: modalFadeIn 0.3s ease forwards;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                background-color: rgba(0, 0, 0, 0);
+            }
+            to {
+                opacity: 1;
+                background-color: rgba(0, 0, 0, 0.9);
+            }
+        }
+        
+        .modal-container {
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            position: relative;
+        }
+        
+        .modal-container::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        
+        .modal-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+        
+        .modal-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+        }
+        
+        .modal-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
         }
         
         .modal-content {
-            max-width: 90%;
-            max-height: 90%;
+            transition: transform 0.3s ease;
+            cursor: grab;
+            max-width: 1000px;
+            max-height: 800px;
+            display: block;
+        }
+        
+        .modal-content:active {
+            cursor: grabbing;
+        }
+        
+        .zoom-modal.active .modal-content {
+            animation: imageZoomIn 0.4s ease-out forwards;
+        }
+        
+        @keyframes imageZoomIn {
+            0% {
+                transform: scale(0.3) translateY(50px);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.05) translateY(0);
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
         }
         
         .close-modal {
@@ -259,11 +327,22 @@
             font-size: 40px;
             font-weight: bold;
             cursor: pointer;
-            transition: color 0.3s;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: rotate(0deg);
+            animation: closeButtonFadeIn 0.5s ease 0.3s forwards;
+        }
+        
+        @keyframes closeButtonFadeIn {
+            to {
+                opacity: 1;
+            }
         }
         
         .close-modal:hover {
-            color: #f0f5ff;
+            color: #ff6b6b;
+            transform: rotate(90deg);
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
         }
         
         .zoom-controls {
@@ -273,20 +352,38 @@
             transform: translateX(-50%);
             display: flex;
             gap: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 25px;
+            backdrop-filter: blur(5px);
+            animation: controlsFadeIn 0.5s ease 0.3s forwards;
+            opacity: 0;
+        }
+        
+        @keyframes controlsFadeIn {
+            to {
+                opacity: 1;
+            }
         }
         
         .zoom-btn {
-            background-color: rgba(255,255,255,0.2);
+            background-color: rgba(255, 255, 255, 0.2);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 8px 16px;
+            border-radius: 20px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
         .zoom-btn:hover {
-            background-color: rgba(255,255,255,0.3);
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
         @media (max-width: 768px) {
@@ -353,464 +450,20 @@
             margin-bottom: 10px;
             color: #2c5aa0;
         }
-
-        <!-- Add this CSS to the existing style section -->
-<style>
-    /* Add scrollbar styles for zoomed image container */
-    .modal-container {
-        max-width: 90%;
-        max-height: 90%;
-        overflow: auto;
-        position: relative;
-    }
-    
-    .modal-container::-webkit-scrollbar {
-        width: 10px;
-        height: 10px;
-    }
-    
-    .modal-container::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 5px;
-    }
-    
-    .modal-container::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 5px;
-    }
-    
-    .modal-container::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.5);
-    }
-    
-    /* Enhanced zoom modal animation */
-    .zoom-modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0);
-        z-index: 1000;
-        justify-content: center;
-        align-items: center;
-        opacity: 0;
-        transition: background-color 0.3s ease, opacity 0.3s ease;
-    }
-    
-    .zoom-modal.active {
-        display: flex;
-        background-color: rgba(0, 0, 0, 0.9);
-        opacity: 1;
-        animation: modalFadeIn 0.3s ease forwards;
-    }
-    
-    @keyframes modalFadeIn {
-        from {
-            opacity: 0;
-            background-color: rgba(0, 0, 0, 0);
-        }
-        to {
-            opacity: 1;
-            background-color: rgba(0, 0, 0, 0.9);
-        }
-    }
-    
-    .modal-content {
-        transition: transform 0.3s ease;
-        cursor: grab;
-        max-width: 1000px;
-        max-height: 800px;
-    }
-    
-    .modal-content:active {
-        cursor: grabbing;
-    }
-    
-    /* Animation for modal content */
-    .zoom-modal.active .modal-content {
-        animation: imageZoomIn 0.4s ease-out forwards;
-    }
-    
-    @keyframes imageZoomIn {
-        0% {
-            transform: scale(0.3) translateY(50px);
-            opacity: 0;
-        }
-        70% {
-            transform: scale(1.05) translateY(0);
-        }
-        100% {
-            transform: scale(1) translateY(0);
-            opacity: 1;
-        }
-    }
-    
-    /* Enhanced zoom controls */
-    .zoom-controls {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        gap: 10px;
-        background: rgba(0, 0, 0, 0.6);
-        padding: 10px 20px;
-        border-radius: 25px;
-        backdrop-filter: blur(5px);
-        animation: controlsFadeIn 0.5s ease 0.3s forwards;
-        opacity: 0;
-    }
-    
-    @keyframes controlsFadeIn {
-        to {
-            opacity: 1;
-        }
-    }
-    
-    .zoom-btn {
-        background-color: rgba(255, 255, 255, 0.2);
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 20px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-    }
-    
-    .zoom-btn:hover {
-        background-color: rgba(255, 255, 255, 0.3);
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    }
-    
-    /* Close button animation */
-    .close-modal {
-        position: absolute;
-        top: 20px;
-        right: 30px;
-        color: white;
-        font-size: 40px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        opacity: 0;
-        transform: rotate(0deg);
-        animation: closeButtonFadeIn 0.5s ease 0.3s forwards;
-    }
-    
-    @keyframes closeButtonFadeIn {
-        to {
-            opacity: 1;
-        }
-    }
-    
-    .close-modal:hover {
-        color: #ff6b6b;
-        transform: rotate(90deg);
-        text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
-    }
-</style>
-
-<!-- Update the zoom modal HTML structure -->
-<div class="zoom-modal" id="zoomModal">
-    <span class="close-modal" id="closeModal">&times;</span>
-    <div class="modal-container" id="modalContainer">
-        <img class="modal-content" id="modalImage" src="" alt="Zoomed Image">
-    </div>
-    <div class="zoom-controls">
-        <button class="zoom-btn" id="zoomIn">➕ Zoom In</button>
-        <button class="zoom-btn" id="zoomOut">➖ Zoom Out</button>
-        <button class="zoom-btn" id="resetZoom">↺ Reset</button>
-        <button class="zoom-btn" id="scrollToggle">🔄 Auto-Scroll</button>
-    </div>
-</div>
-
-<!-- Add this JavaScript to the existing script -->
-<script>
-    // Update modal elements
-    const modalContainer = document.getElementById('modalContainer');
-    let autoScroll = false;
-    let autoScrollInterval;
-    const scrollToggle = document.getElementById('scrollToggle');
-
-    // Update openZoomModal function
-    function openZoomModal(imageSrc) {
-        modalImage.src = imageSrc;
-        resetZoom();
-        zoomModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        
-        // Reset scroll position
-        modalContainer.scrollTop = 0;
-        modalContainer.scrollLeft = 0;
-        
-        // Disable auto-scroll on new image
-        autoScroll = false;
-        scrollToggle.textContent = '🔄 Auto-Scroll';
-        clearInterval(autoScrollInterval);
-    }
-
-    // Update resetZoom function
-    function resetZoom() {
-        currentScale = 1;
-        translateX = 0;
-        translateY = 0;
-        updateImageTransform();
-        centerImage();
-    }
-
-    // Add centerImage function
-    function centerImage() {
-        if (modalContainer) {
-            modalContainer.scrollLeft = (modalContainer.scrollWidth - modalContainer.clientWidth) / 2;
-            modalContainer.scrollTop = (modalContainer.scrollHeight - modalContainer.clientHeight) / 2;
-        }
-    }
-
-    // Update updateImageTransform function
-    function updateImageTransform() {
-        modalImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentScale})`;
-        
-        // Center image after transform
-        setTimeout(centerImage, 50);
-    }
-
-    // Add auto-scroll toggle functionality
-    scrollToggle.addEventListener('click', () => {
-        autoScroll = !autoScroll;
-        scrollToggle.textContent = autoScroll ? '⏸️ Stop Auto-Scroll' : '🔄 Auto-Scroll';
-        
-        if (autoScroll) {
-            startAutoScroll();
-        } else {
-            stopAutoScroll();
-        }
-    });
-
-    function startAutoScroll() {
-        clearInterval(autoScrollInterval);
-        autoScrollInterval = setInterval(() => {
-            if (modalContainer && autoScroll) {
-                // Scroll down slowly
-                modalContainer.scrollTop += 1;
-                
-                // If at bottom, reset to top
-                if (modalContainer.scrollTop + modalContainer.clientHeight >= modalContainer.scrollHeight - 10) {
-                    modalContainer.scrollTop = 0;
-                }
-            }
-        }, 50);
-    }
-
-    function stopAutoScroll() {
-        clearInterval(autoScrollInterval);
-    }
-
-    // Update closeZoomModal function
-    function closeZoomModal() {
-        zoomModal.classList.remove('active');
-        document.body.style.overflow = 'auto';
-        resetZoom();
-        stopAutoScroll();
-        autoScroll = false;
-        scrollToggle.textContent = '🔄 Auto-Scroll';
-    }
-
-    // Update mouse event handlers for scrolling
-    modalContainer.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        
-        if (e.ctrlKey) {
-            // Ctrl + Wheel for zoom
-            if (e.deltaY < 0) {
-                currentScale += scaleStep;
-            } else if (e.deltaY > 0 && currentScale > scaleStep) {
-                currentScale -= scaleStep;
-            }
-            updateImageTransform();
-        } else {
-            // Regular wheel for scrolling
-            if (e.shiftKey) {
-                // Horizontal scrolling
-                modalContainer.scrollLeft += e.deltaY;
-            } else {
-                // Vertical scrolling
-                modalContainer.scrollTop += e.deltaY;
-            }
-        }
-    });
-
-    // Enhanced drag functionality with boundaries
-    modalImage.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        startX = e.clientX - translateX;
-        startY = e.clientY - translateY;
-        modalImage.style.cursor = 'grabbing';
-        stopAutoScroll(); // Stop auto-scroll when manually dragging
-        autoScroll = false;
-        scrollToggle.textContent = '🔄 Auto-Scroll';
-    });
-
-    // Update mousemove handler with boundaries
-    document.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        
-        const newTranslateX = e.clientX - startX;
-        const newTranslateY = e.clientY - startY;
-        
-        // Calculate boundaries based on image size and container
-        const maxTranslateX = (modalImage.width * currentScale - modalContainer.clientWidth) / 2;
-        const maxTranslateY = (modalImage.height * currentScale - modalContainer.clientHeight) / 2;
-        
-        // Apply boundaries
-        translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, newTranslateX));
-        translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, newTranslateY));
-        
-        updateImageTransform();
-    });
-
-    // Touch support for zoom modal scrolling
-    let initialPinchDistance = null;
-    let initialScale = 1;
-
-    modalContainer.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 2) {
-            // Pinch zoom
-            initialPinchDistance = Math.hypot(
-                e.touches[0].clientX - e.touches[1].clientX,
-                e.touches[0].clientY - e.touches[1].clientY
-            );
-            initialScale = currentScale;
-        } else if (e.touches.length === 1) {
-            // Single touch for dragging
-            isDragging = true;
-            startX = e.touches[0].clientX - translateX;
-            startY = e.touches[0].clientY - translateY;
-        }
-    });
-
-    modalContainer.addEventListener('touchmove', (e) => {
-        e.preventDefault();
-        
-        if (e.touches.length === 2 && initialPinchDistance !== null) {
-            // Pinch zoom gesture
-            const currentDistance = Math.hypot(
-                e.touches[0].clientX - e.touches[1].clientX,
-                e.touches[0].clientY - e.touches[1].clientY
-            );
-            
-            const scaleChange = currentDistance / initialPinchDistance;
-            currentScale = Math.max(0.5, Math.min(3, initialScale * scaleChange));
-            updateImageTransform();
-        } else if (e.touches.length === 1 && isDragging) {
-            // Single touch drag
-            translateX = e.touches[0].clientX - startX;
-            translateY = e.touches[0].clientY - startY;
-            updateImageTransform();
-        }
-    });
-
-    modalContainer.addEventListener('touchend', () => {
-        isDragging = false;
-        initialPinchDistance = null;
-        modalImage.style.cursor = 'grab';
-    });
-
-    // Add animation to zoom buttons
-    zoomInBtn.addEventListener('click', () => {
-        currentScale += scaleStep;
-        updateImageTransform();
-        animateButton(zoomInBtn);
-    });
-
-    zoomOutBtn.addEventListener('click', () => {
-        if (currentScale > scaleStep) {
-            currentScale -= scaleStep;
-            updateImageTransform();
-            animateButton(zoomOutBtn);
-        }
-    });
-
-    resetZoomBtn.addEventListener('click', () => {
-        resetZoom();
-        animateButton(resetZoomBtn);
-    });
-
-    function animateButton(button) {
-        button.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-            button.style.transform = 'scale(1)';
-        }, 150);
-    }
-
-    // Add keyboard shortcuts for modal
-    document.addEventListener('keydown', (e) => {
-        if (zoomModal.classList.contains('active')) {
-            switch(e.key) {
-                case '+':
-                case '=':
-                    e.preventDefault();
-                    currentScale += scaleStep;
-                    updateImageTransform();
-                    break;
-                case '-':
-                    e.preventDefault();
-                    if (currentScale > scaleStep) {
-                        currentScale -= scaleStep;
-                        updateImageTransform();
-                    }
-                    break;
-                case '0':
-                    e.preventDefault();
-                    resetZoom();
-                    break;
-                case ' ':
-                    e.preventDefault();
-                    autoScroll = !autoScroll;
-                    scrollToggle.textContent = autoScroll ? '⏸️ Stop Auto-Scroll' : '🔄 Auto-Scroll';
-                    if (autoScroll) {
-                        startAutoScroll();
-                    } else {
-                        stopAutoScroll();
-                    }
-                    break;
-                case 'ArrowUp':
-                    e.preventDefault();
-                    modalContainer.scrollTop -= 50;
-                    break;
-                case 'ArrowDown':
-                    e.preventDefault();
-                    modalContainer.scrollTop += 50;
-                    break;
-                case 'ArrowLeft':
-                    e.preventDefault();
-                    modalContainer.scrollLeft -= 50;
-                    break;
-                case 'ArrowRight':
-                    e.preventDefault();
-                    modalContainer.scrollLeft += 50;
-                    break;
-            }
-        }
-    });
-</script>
     </style>
 </head>
 <body>
-    <!-- Zoom Modal -->
+    <!-- Fixed Zoom Modal Structure -->
     <div class="zoom-modal" id="zoomModal">
         <span class="close-modal" id="closeModal">&times;</span>
-        <img class="modal-content" id="modalImage" src="" alt="Zoomed Image">
+        <div class="modal-container" id="modalContainer">
+            <img class="modal-content" id="modalImage" src="" alt="Zoomed Image">
+        </div>
         <div class="zoom-controls">
-            <button class="zoom-btn" id="zoomIn">Zoom In</button>
-            <button class="zoom-btn" id="zoomOut">Zoom Out</button>
-            <button class="zoom-btn" id="resetZoom">Reset</button>
+            <button class="zoom-btn" id="zoomIn">➕ Zoom In</button>
+            <button class="zoom-btn" id="zoomOut">➖ Zoom Out</button>
+            <button class="zoom-btn" id="resetZoom">↺ Reset</button>
+            <button class="zoom-btn" id="scrollToggle">🔄 Auto-Scroll</button>
         </div>
     </div>
     
@@ -1164,16 +817,20 @@
         
         // Zoom modal elements
         const zoomModal = document.getElementById('zoomModal');
+        const modalContainer = document.getElementById('modalContainer');
         const modalImage = document.getElementById('modalImage');
         const closeModal = document.getElementById('closeModal');
         const zoomInBtn = document.getElementById('zoomIn');
         const zoomOutBtn = document.getElementById('zoomOut');
         const resetZoomBtn = document.getElementById('resetZoom');
+        const scrollToggle = document.getElementById('scrollToggle');
         
         let currentScale = 1;
         const scaleStep = 0.2;
         let isDragging = false;
         let startX, startY, translateX = 0, translateY = 0;
+        let autoScroll = false;
+        let autoScrollInterval;
         
         // Update slide counter
         document.getElementById('totalSlides').textContent = totalSlides;
@@ -1239,12 +896,24 @@
             resetZoom();
             zoomModal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            
+            // Reset scroll position
+            modalContainer.scrollTop = 0;
+            modalContainer.scrollLeft = 0;
+            
+            // Disable auto-scroll on new image
+            autoScroll = false;
+            scrollToggle.textContent = '🔄 Auto-Scroll';
+            clearInterval(autoScrollInterval);
         }
         
         function closeZoomModal() {
             zoomModal.classList.remove('active');
             document.body.style.overflow = 'auto';
             resetZoom();
+            stopAutoScroll();
+            autoScroll = false;
+            scrollToggle.textContent = '🔄 Auto-Scroll';
         }
         
         function resetZoom() {
@@ -1252,26 +921,80 @@
             translateX = 0;
             translateY = 0;
             updateImageTransform();
+            centerImage();
+        }
+        
+        function centerImage() {
+            if (modalContainer) {
+                modalContainer.scrollLeft = (modalContainer.scrollWidth - modalContainer.clientWidth) / 2;
+                modalContainer.scrollTop = (modalContainer.scrollHeight - modalContainer.clientHeight) / 2;
+            }
         }
         
         function updateImageTransform() {
             modalImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentScale})`;
+            
+            // Center image after transform
+            setTimeout(centerImage, 50);
+        }
+        
+        // Auto-scroll functionality
+        scrollToggle.addEventListener('click', () => {
+            autoScroll = !autoScroll;
+            scrollToggle.textContent = autoScroll ? '⏸️ Stop Auto-Scroll' : '🔄 Auto-Scroll';
+            
+            if (autoScroll) {
+                startAutoScroll();
+            } else {
+                stopAutoScroll();
+            }
+        });
+        
+        function startAutoScroll() {
+            clearInterval(autoScrollInterval);
+            autoScrollInterval = setInterval(() => {
+                if (modalContainer && autoScroll) {
+                    // Scroll down slowly
+                    modalContainer.scrollTop += 1;
+                    
+                    // If at bottom, reset to top
+                    if (modalContainer.scrollTop + modalContainer.clientHeight >= modalContainer.scrollHeight - 10) {
+                        modalContainer.scrollTop = 0;
+                    }
+                }
+            }, 50);
+        }
+        
+        function stopAutoScroll() {
+            clearInterval(autoScrollInterval);
         }
         
         // Zoom controls
         zoomInBtn.addEventListener('click', () => {
             currentScale += scaleStep;
             updateImageTransform();
+            animateButton(zoomInBtn);
         });
         
         zoomOutBtn.addEventListener('click', () => {
             if (currentScale > scaleStep) {
                 currentScale -= scaleStep;
                 updateImageTransform();
+                animateButton(zoomOutBtn);
             }
         });
         
-        resetZoomBtn.addEventListener('click', resetZoom);
+        resetZoomBtn.addEventListener('click', () => {
+            resetZoom();
+            animateButton(resetZoomBtn);
+        });
+        
+        function animateButton(button) {
+            button.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1)';
+            }, 150);
+        }
         
         // Close modal on X click
         closeModal.addEventListener('click', closeZoomModal);
@@ -1289,17 +1012,101 @@
             startX = e.clientX - translateX;
             startY = e.clientY - translateY;
             modalImage.style.cursor = 'grabbing';
+            stopAutoScroll(); // Stop auto-scroll when manually dragging
+            autoScroll = false;
+            scrollToggle.textContent = '🔄 Auto-Scroll';
         });
         
         document.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
-            translateX = e.clientX - startX;
-            translateY = e.clientY - startY;
+            
+            const newTranslateX = e.clientX - startX;
+            const newTranslateY = e.clientY - startY;
+            
+            // Calculate boundaries based on image size and container
+            const maxTranslateX = (modalImage.width * currentScale - modalContainer.clientWidth) / 2;
+            const maxTranslateY = (modalImage.height * currentScale - modalContainer.clientHeight) / 2;
+            
+            // Apply boundaries
+            translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, newTranslateX));
+            translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, newTranslateY));
+            
             updateImageTransform();
         });
         
         document.addEventListener('mouseup', () => {
             isDragging = false;
+            modalImage.style.cursor = 'grab';
+        });
+        
+        // Mouse wheel for zoom and scroll
+        modalContainer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            
+            if (e.ctrlKey) {
+                // Ctrl + Wheel for zoom
+                if (e.deltaY < 0) {
+                    currentScale += scaleStep;
+                } else if (e.deltaY > 0 && currentScale > scaleStep) {
+                    currentScale -= scaleStep;
+                }
+                updateImageTransform();
+            } else {
+                // Regular wheel for scrolling
+                if (e.shiftKey) {
+                    // Horizontal scrolling
+                    modalContainer.scrollLeft += e.deltaY;
+                } else {
+                    // Vertical scrolling
+                    modalContainer.scrollTop += e.deltaY;
+                }
+            }
+        });
+        
+        // Touch support for zoom modal
+        let initialPinchDistance = null;
+        let initialScale = 1;
+        
+        modalContainer.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+                // Pinch zoom
+                initialPinchDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                initialScale = currentScale;
+            } else if (e.touches.length === 1) {
+                // Single touch for dragging
+                isDragging = true;
+                startX = e.touches[0].clientX - translateX;
+                startY = e.touches[0].clientY - translateY;
+            }
+        });
+        
+        modalContainer.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            
+            if (e.touches.length === 2 && initialPinchDistance !== null) {
+                // Pinch zoom gesture
+                const currentDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                
+                const scaleChange = currentDistance / initialPinchDistance;
+                currentScale = Math.max(0.5, Math.min(3, initialScale * scaleChange));
+                updateImageTransform();
+            } else if (e.touches.length === 1 && isDragging) {
+                // Single touch drag
+                translateX = e.touches[0].clientX - startX;
+                translateY = e.touches[0].clientY - startY;
+                updateImageTransform();
+            }
+        });
+        
+        modalContainer.addEventListener('touchend', () => {
+            isDragging = false;
+            initialPinchDistance = null;
             modalImage.style.cursor = 'grab';
         });
         
@@ -1353,7 +1160,7 @@
             });
         });
         
-        // Touch support for mobile devices
+        // Touch support for mobile devices (slide navigation)
         let touchStartX = 0;
         let touchStartY = 0;
         
@@ -1376,6 +1183,57 @@
                     } else if (diffX < 0 && currentSlide > 0) {
                         showSlide(currentSlide - 1); // Swipe right for previous
                     }
+                }
+            }
+        });
+        
+        // Keyboard shortcuts for modal
+        document.addEventListener('keydown', (e) => {
+            if (zoomModal.classList.contains('active')) {
+                switch(e.key) {
+                    case '+':
+                    case '=':
+                        e.preventDefault();
+                        currentScale += scaleStep;
+                        updateImageTransform();
+                        break;
+                    case '-':
+                        e.preventDefault();
+                        if (currentScale > scaleStep) {
+                            currentScale -= scaleStep;
+                            updateImageTransform();
+                        }
+                        break;
+                    case '0':
+                        e.preventDefault();
+                        resetZoom();
+                        break;
+                    case ' ':
+                        e.preventDefault();
+                        autoScroll = !autoScroll;
+                        scrollToggle.textContent = autoScroll ? '⏸️ Stop Auto-Scroll' : '🔄 Auto-Scroll';
+                        if (autoScroll) {
+                            startAutoScroll();
+                        } else {
+                            stopAutoScroll();
+                        }
+                        break;
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        modalContainer.scrollTop -= 50;
+                        break;
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        modalContainer.scrollTop += 50;
+                        break;
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        modalContainer.scrollLeft -= 50;
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        modalContainer.scrollLeft += 50;
+                        break;
                 }
             }
         });
