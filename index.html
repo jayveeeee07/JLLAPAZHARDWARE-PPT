@@ -11,1406 +11,607 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
-            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            background-color: #f5f5f5;
             color: #333;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .presentation-container {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .slides-container {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            padding: 40px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            transform: translateX(100%);
-            transition: transform 0.5s ease-in-out;
-            opacity: 0;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .slide.active {
-            transform: translateX(0);
-            opacity: 1;
-        }
-
-        .slide-header {
-            text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #1a2980;
-        }
-
-        .slide-header h1 {
-            color: #1a2980;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .slide-header h2 {
-            color: #26d0ce;
-            font-size: 1.8rem;
-            font-weight: 400;
-        }
-
-        .slide-content {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        /* Question Answer Styles */
-        .qa-container {
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-
-        .qa-category {
-            margin-bottom: 30px;
-        }
-
-        .qa-category h3 {
-            background: #1a2980;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .qa-item {
-            background: #f8f9fa;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            overflow: hidden;
-            border-left: 5px solid #26d0ce;
-            transition: transform 0.3s;
-        }
-
-        .qa-item:hover {
-            transform: translateX(5px);
-        }
-
-        .question {
-            padding: 15px 20px;
-            background: #e8f4fd;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-        }
-
-        .answer {
-            padding: 20px;
-            background: white;
-            border-top: 1px solid #eee;
-            display: none;
             line-height: 1.6;
         }
-
-        .answer.show {
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .slide {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            padding: 40px;
+            min-height: 80vh;
+            display: none;
+        }
+        
+        .slide.active {
             display: block;
-            animation: slideDown 0.3s ease-out;
         }
-
-        .toggle-icon {
-            color: #1a2980;
-            font-weight: bold;
-            font-size: 1.2rem;
+        
+        .slide-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c5aa0;
         }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        
+        .slide-header h1 {
+            color: #2c5aa0;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
         }
-
+        
+        .slide-header h2 {
+            color: #4a7cc8;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .slide-content {
+            font-size: 1.1rem;
+        }
+        
         .team-members {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
-            margin-top: 20px;
+            margin-top: 25px;
         }
-
-        .team-member {
-            background: #f0f8ff;
+        
+        .member {
+            background-color: #f0f5ff;
             padding: 10px;
             border-radius: 5px;
             text-align: center;
-            border-left: 4px solid #26d0ce;
+            border-left: 4px solid #2c5aa0;
         }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+        
+        .objectives-list, .scope-list, .limitations-list {
+            list-style-type: none;
+            margin: 20px 0;
         }
-
-        .feature-card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border-top: 5px solid #1a2980;
+        
+        .objectives-list li, .scope-list li, .limitations-list li {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .objectives-list li:before, .scope-list li:before {
+            content: "✓";
+            color: #2c5aa0;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .limitations-list li:before {
+            content: "✗";
+            color: #d9534f;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .image-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .flowchart-img {
+            max-width: 100%;
+            max-height: 400px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
-
-        .feature-card h3 {
-            color: #1a2980;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        
+        .logo-img {
+            max-width: 300px;
+            margin: 0 auto 20px;
+            display: block;
         }
-
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-
-        .comparison-table th, .comparison-table td {
-            padding: 12px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
-
-        .comparison-table th {
-            background: #1a2980;
-            color: white;
-        }
-
-        .comparison-table tr:nth-child(even) {
-            background: #f8f9fa;
-        }
-
-        .icon {
-            font-size: 24px;
-            margin-right: 10px;
-        }
-
-        .process-flow {
-            background: #f0f8ff;
-            padding: 20px;
-            border-radius: 8px;
-            font-family: monospace;
-            margin: 20px 0;
-            border: 1px solid #1a2980;
-        }
-
-        .benefit-badge {
-            display: inline-block;
-            background: #26d0ce;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            margin: 5px;
-            font-weight: bold;
-        }
-
-        .timeline {
-            position: relative;
-            margin: 30px 0;
-            padding-left: 30px;
-        }
-
-        .timeline-item {
-            margin-bottom: 20px;
-            padding-left: 20px;
-            border-left: 3px solid #1a2980;
-            position: relative;
-        }
-
-        .timeline-item:before {
-            content: '';
-            position: absolute;
-            left: -10px;
-            top: 0;
-            width: 16px;
-            height: 16px;
-            background: #26d0ce;
-            border-radius: 50%;
-        }
-
-        .controls {
+        
+        .navigation {
             display: flex;
             justify-content: space-between;
-            padding: 20px;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
+            margin-top: 20px;
         }
-
+        
         .nav-btn {
-            background: #1a2980;
+            background-color: #2c5aa0;
             color: white;
             border: none;
             padding: 12px 25px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s;
+            font-size: 1rem;
+            transition: background-color 0.3s;
         }
-
+        
         .nav-btn:hover {
-            background: #26d0ce;
-            transform: translateY(-2px);
+            background-color: #1e3d6f;
         }
-
+        
+        .nav-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
         .slide-counter {
-            color: white;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .presentation-title {
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        /* Demo phone styles */
-        .demo-phone {
-            width: 300px;
-            height: 600px;
-            background: #222;
-            border-radius: 30px;
-            padding: 20px;
-            margin: 20px auto;
-            position: relative;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-
-        .phone-screen {
-            width: 100%;
-            height: 100%;
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .app-screen {
-            padding: 20px;
-        }
-
-        .app-header {
-            background: #1a2980;
-            color: white;
-            padding: 15px;
             text-align: center;
-            border-radius: 10px 10px 0 0;
+            color: #666;
+            margin-top: 10px;
         }
-
-        .app-button {
-            background: #26d0ce;
-            color: white;
-            padding: 12px;
-            margin: 10px;
+        
+        .module-title {
+            color: #2c5aa0;
+            font-size: 1.4rem;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .highlight-box {
+            background-color: #f0f5ff;
+            padding: 20px;
             border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
+            margin: 20px 0;
+            border-left: 5px solid #2c5aa0;
         }
-
-        .app-button:hover {
-            background: #1a2980;
-            transform: scale(1.05);
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
         }
-
-        /* Animation for demo */
-        @keyframes demoAnimation {
-            0% { transform: translateY(-10px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
-
-        .demo-step {
-            animation: demoAnimation 0.5s ease-out;
-        }
-
-        /* Responsive design */
+        
         @media (max-width: 768px) {
-            .slide {
-                padding: 20px;
-            }
-            
-            .slide-header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .slide-header h2 {
-                font-size: 1.4rem;
-            }
-            
-            .feature-grid {
+            .two-column {
                 grid-template-columns: 1fr;
             }
             
             .team-members {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
             
-            .demo-phone {
-                transform: scale(0.8);
-            }
-            
-            .qa-container {
-                max-height: 60vh;
+            .slide {
+                padding: 20px;
+                min-height: auto;
             }
         }
     </style>
 </head>
 <body>
     <div class="presentation-container">
-        <div class="slides-container">
-            <!-- Slide 1: Title -->
-            <div class="slide title-slide active" id="slide1">
-                <div class="slide-header">
-                    <h1>JL LAPAZ HARDWARE MANAGEMENT SYSTEM</h1>
-                    <h2>A Smartphone-Based Solution for Modern Hardware Store Operations</h2>
+        <!-- Slide 1: Title Slide -->
+        <div class="slide active" id="slide1">
+            <div class="slide-header">
+                <img src="logo.jpg" alt="JL Lapaz Hardware Logo" class="logo-img">
+                <h1>MANAGEMENT SYSTEM OF JL LAPAZ HARDWARE</h1>
+                <h2>SITIO/PUROK DUMANIG BRGY. UPPER MAINIT<br>MALUNGON SARANGANI PROVINCE</h2>
+            </div>
+            
+            <div class="slide-content">
+                <div class="highlight-box">
+                    <h3>Presented by:</h3>
+                    <div class="team-members">
+                        <div class="member">Jayvee Caringal</div>
+                        <div class="member">Princess Loraine Padilla</div>
+                        <div class="member">Christian Lasponia</div>
+                        <div class="member">Mar Jhon Luyao</div>
+                        <div class="member">Arianne Shane Pales</div>
+                        <div class="member">Jenny Rose Indab</div>
+                        <div class="member">Dexie Jay Jolosjos</div>
+                        <div class="member">Lenie Mariano</div>
+                        <div class="member">Karl Jay Balolo</div>
+                        <div class="member">Cyrel Caballero</div>
+                        <div class="member">Michael Senope</div>
+                        <div class="member">Shaina Gean Bayawan</div>
+                    </div>
                 </div>
-                <div class="slide-content">
-                    <div style="text-align: center; margin: 40px 0;">
-                        <h3 style="color: white; margin-bottom: 30px;">Presented by:</h3>
-                        <div class="team-members">
-                            <div class="team-member">Jayvee Caringal</div>
-                            <div class="team-member">Princess Loraine Padilla</div>
-                            <div class="team-member">Christian Lasponia</div>
-                            <div class="team-member">Mar Jhon Luyao</div>
-                            <div class="team-member">Arianne Shane Pales</div>
-                            <div class="team-member">Jenny Rose Indab</div>
-                            <div class="team-member">Dexie Jay Jolosjos</div>
-                            <div class="team-member">Lenie Mariano</div>
-                            <div class="team-member">Karl Jay Balolo</div>
-                            <div class="team-member">Cyrel Caballero</div>
-                            <div class="team-member">Michael Senope</div>
-                            <div class="team-member">Shaina Gean Bayawan</div>
-                        </div>
-                    </div>
-                    <div style="text-align: center; margin-top: 40px;">
-                        <h3 style="color: white;">Capstone Project Presentation</h3>
-                        <h2 style="color: white; margin-top: 10px;">January 2026</h2>
-                    </div>
+                
+                <div style="text-align: center; margin-top: 40px; font-size: 1.5rem; color: #2c5aa0; font-weight: bold;">
+                    JANUARY 2026
                 </div>
             </div>
-
-            <!-- Slide 2: Agenda -->
-            <div class="slide" id="slide2">
-                <div class="slide-header">
-                    <h1>Presentation Agenda</h1>
-                    <h2>What We'll Cover Today</h2>
+        </div>
+        
+        <!-- Slide 2: Proposed Title -->
+        <div class="slide" id="slide2">
+            <div class="slide-header">
+                <h1>PROPOSED TITLE</h1>
+            </div>
+            
+            <div class="slide-content">
+                <div class="highlight-box" style="text-align: center; font-size: 1.3rem;">
+                    Management System of JL Lapaz Hardware<br>
+                    of Sitio/Purok Dumanig Brgy. Upper Mainit<br>
+                    Malungon Sarangani Province
                 </div>
-                <div class="slide-content">
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <h3>📋 Introduction & Problem Statement</h3>
-                            <p>Understanding the challenges faced by JL Lapaz Hardware</p>
-                        </div>
-                        <div class="timeline-item">
-                            <h3>🎯 Project Objectives</h3>
-                            <p>Our goals and what we aim to achieve</p>
-                        </div>
-                        <div class="timeline-item">
-                            <h3>⚙️ System Overview & Features</h3>
-                            <p>Key features and how the system works</p>
-                        </div>
-                        <div class="timeline-item">
-                            <h3>💻 Technical Implementation</h3>
-                            <p>Technology stack and architecture</p>
-                        </div>
-                        <div class="timeline-item">
-                            <h3>📊 System Flow & Processes</h3>
-                            <p>Step-by-step workflow demonstration</p>
-                        </div>
-                        <div class="timeline-item">
-                            <h3>📈 Benefits & Impact</h3>
-                            <p>Measurable improvements and business impact</p>
-                        </div>
-                        <div class="timeline-item">
-                            <h3>🔄 Live Demonstration</h3>
-                            <p>See the system in action</p>
-                        </div>
-                        <div class="timeline-item">
-                            <h3>❓ Q&A Session</h3>
-                            <p>Your questions answered</p>
-                        </div>
-                    </div>
-                    <div style="text-align: center; margin-top: 20px;">
-                        <p><strong>Duration:</strong> 15 minutes presentation + 5 minutes Q&A</p>
-                    </div>
+                
+                <div class="image-container">
+                    <img src="logo.jpg" alt="JL Lapaz Hardware Logo" class="logo-img">
                 </div>
             </div>
-
-            <!-- Slide 3: Introduction -->
-            <div class="slide" id="slide3">
-                <div class="slide-header">
-                    <h1>Introduction</h1>
-                    <h2>Understanding the Business Context</h2>
+        </div>
+        
+        <!-- Slide 3: Primary Objective -->
+        <div class="slide" id="slide3">
+            <div class="slide-header">
+                <h1>OBJECTIVES</h1>
+            </div>
+            
+            <div class="slide-content">
+                <h3>Primary Objective:</h3>
+                <div class="highlight-box">
+                    To develop a comprehensive Smartphone-based management system that automates and streamlines the daily operations of hardware stores, replacing error-prone manual processes with efficient digital solutions.
                 </div>
-                <div class="slide-content">
-                    <div class="feature-card">
-                        <h3>🏪 Client Profile</h3>
-                        <ul style="margin-left: 20px; line-height: 1.8;">
-                            <li><strong>JL Lapaz Hardware Store</strong></li>
-                            <li>Location: Sitio Dumanig, Brgy. Upper Mainit, Malungon, Sarangani Province</li>
-                            <li>Family-owned business since 2010</li>
-                            <li>Serves construction needs of the local community</li>
-                            <li>Current operations: Manual record-keeping</li>
+                
+                <div class="image-container">
+                    <img src="fc1.jpg" alt="Main System Flowchart" class="flowchart-img">
+                    <p>Main System Flowchart</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 4: Specific Objectives -->
+        <div class="slide" id="slide4">
+            <div class="slide-header">
+                <h1>SPECIFIC OBJECTIVES</h1>
+            </div>
+            
+            <div class="slide-content">
+                <div class="two-column">
+                    <div>
+                        <h3 class="module-title">1. Operational Efficiency</h3>
+                        <ul class="objectives-list">
+                            <li>To reduce transaction processing time by 70% compared to manual methods</li>
+                            <li>To automate inventory tracking with real-time stock updates</li>
+                            <li>To eliminate calculation errors in pricing and totals</li>
+                        </ul>
+                        
+                        <h3 class="module-title">2. Inventory Control</h3>
+                        <ul class="objectives-list">
+                            <li>To maintain accurate stock levels across all product categories</li>
+                            <li>To implement automatic reordering alerts for low-stock items</li>
+                            <li>To track product movement patterns and identify fast/slow-moving items</li>
                         </ul>
                     </div>
-
-                    <div class="feature-card">
-                        <h3>⚠️ Current Challenges</h3>
-                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px;">
-                            <div style="flex: 1; min-width: 200px; padding: 15px; background: #fff0f0; border-radius: 5px;">
-                                <h4>📓 Manual Record-Keeping</h4>
-                                <p>Notebooks that can get lost or damaged</p>
-                            </div>
-                            <div style="flex: 1; min-width: 200px; padding: 15px; background: #fff0f0; border-radius: 5px;">
-                                <h4>🧮 Calculation Errors</h4>
-                                <p>Human errors in pricing and totals</p>
-                            </div>
-                            <div style="flex: 1; min-width: 200px; padding: 15px; background: #fff0f0; border-radius: 5px;">
-                                <h4>⏰ Time-Consuming Processes</h4>
-                                <p>Slow customer service during peak hours</p>
-                            </div>
-                            <div style="flex: 1; min-width: 200px; padding: 15px; background: #fff0f0; border-radius: 5px;">
-                                <h4>❓ Inventory Guesswork</h4>
-                                <p>No real-time stock information</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 4: The Problem -->
-            <div class="slide" id="slide4">
-                <div class="slide-header">
-                    <h1>The Problem</h1>
-                    <h2>Before & After Comparison</h2>
-                </div>
-                <div class="slide-content">
-                    <h3 style="color: #1a2980; margin-bottom: 20px;">BEFORE - MANUAL SYSTEM</h3>
-                    <table class="comparison-table">
-                        <thead>
-                            <tr>
-                                <th>Process</th>
-                                <th>Time Required</th>
-                                <th>Error Rate</th>
-                                <th>Stress Level</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Sales Recording</td>
-                                <td>5-10 minutes</td>
-                                <td>High</td>
-                                <td>😫 HIGH</td>
-                            </tr>
-                            <tr>
-                                <td>Stock Counting</td>
-                                <td>1-2 hours</td>
-                                <td>Very High</td>
-                                <td>😫 HIGH</td>
-                            </tr>
-                            <tr>
-                                <td>Daily Reports</td>
-                                <td>30+ minutes</td>
-                                <td>Medium</td>
-                                <td>😫 HIGH</td>
-                            </tr>
-                            <tr>
-                                <td>Profit Calculation</td>
-                                <td>Guesswork</td>
-                                <td>Very High</td>
-                                <td>😫 HIGH</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div style="background: #fff8e1; padding: 20px; margin-top: 30px; border-radius: 8px;">
-                        <h4 style="color: #ff6b6b;">Result:</h4>
-                        <p>Inefficient operations, lost profits, frustrated customers, and limited business growth</p>
-                    </div>
-
-                    <div style="margin-top: 30px; text-align: center;">
-                        <div class="benefit-badge">Time Waste</div>
-                        <div class="benefit-badge">Revenue Loss</div>
-                        <div class="benefit-badge">Customer Dissatisfaction</div>
-                        <div class="benefit-badge">Business Stagnation</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 5: Our Solution -->
-            <div class="slide" id="slide5">
-                <div class="slide-header">
-                    <h1>Our Solution</h1>
-                    <h2>Digital Transformation for Hardware Stores</h2>
-                </div>
-                <div class="slide-content">
-                    <div style="display: flex; align-items: center; gap: 40px; margin-bottom: 30px;">
-                        <div style="flex: 1;">
-                            <h3 style="color: #1a2980; margin-bottom: 20px;">THE SOLUTION</h3>
-                            <h2 style="color: #26d0ce; font-size: 2rem;">JL Hardware Management System</h2>
-                            <p style="margin-top: 20px; line-height: 1.6;">A complete mobile solution that transforms traditional hardware store operations into efficient digital processes.</p>
-                        </div>
-                        <div style="flex: 1; text-align: center;">
-                            <div style="font-size: 4rem;">📱</div>
-                        </div>
-                    </div>
-
-                    <div class="feature-grid">
-                        <div class="feature-card">
-                            <h3>✅ Digitalizes</h3>
-                            <p>All store operations from sales to inventory</p>
-                        </div>
-                        <div class="feature-card">
-                            <h3>✅ Automates</h3>
-                            <p>Calculations, stock updates, and reporting</p>
-                        </div>
-                        <div class="feature-card">
-                            <h3>✅ Provides</h3>
-                            <p>Real-time business insights and analytics</p>
-                        </div>
-                        <div class="feature-card">
-                            <h3>✅ Runs on</h3>
-                            <p>Existing smartphones - no extra hardware needed</p>
-                        </div>
-                        <div class="feature-card">
-                            <h3>✅ Works Offline</h3>
-                            <p>No internet connection required for daily operations</p>
-                        </div>
-                    </div>
-
-                    <div style="background: #e8f4fd; padding: 20px; margin-top: 30px; border-radius: 8px; text-align: center;">
-                        <h3 style="color: #1a2980;">Core Philosophy</h3>
-                        <p style="font-size: 1.2rem; font-weight: bold; color: #26d0ce;">"Smart Technology for Simple Business Management"</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Continue with main slides... -->
-
-            <!-- Slide 25: Q&A Technical Questions -->
-            <div class="slide" id="slide25">
-                <div class="slide-header">
-                    <h1>Q&A Session</h1>
-                    <h2>Technical Questions</h2>
-                </div>
-                <div class="slide-content">
-                    <div class="qa-container">
-                        <div class="qa-category">
-                            <h3>🔧 Technical Implementation</h3>
-                            
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q1: Why did you choose a smartphone-based system instead of desktop?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> We chose smartphones for three main reasons:</p>
-                                    <ul style="margin-left: 20px; margin-top: 10px;">
-                                        <li><strong>Cost-effectiveness:</strong> Most small business owners already have smartphones</li>
-                                        <li><strong>Portability:</strong> Staff can move around the store while accessing the system</li>
-                                        <li><strong>Familiarity:</strong> Everyone knows how to use smartphones, minimizing training needs</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q2: How does the system work without internet connection?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> We designed it as an <strong>offline-first application</strong>. All data is stored locally on the device using SQLite database. When the phone is connected to Wi-Fi, optional backup features can sync data, but daily operations require no internet.</p>
-                                </div>
-                            </div>
-
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q3: What programming language and tools did you use?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> We used:</p>
-                                    <ul style="margin-left: 20px; margin-top: 10px;">
-                                        <li><strong>Frontend:</strong> Java with Android Studio</li>
-                                        <li><strong>Database:</strong> SQLite for local storage</li>
-                                        <li><strong>Reporting:</strong> Built-in PDF generation libraries</li>
-                                        <li><strong>Version Control:</strong> GitHub for team collaboration</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q4: How do you ensure data security?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> Multiple security layers:</p>
-                                    <ul style="margin-left: 20px; margin-top: 10px;">
-                                        <li><strong>User Authentication:</strong> Password-protected login</li>
-                                        <li><strong>Role-Based Access:</strong> Different permissions for owner vs cashier</li>
-                                        <li><strong>Local Storage:</strong> Data stays on the device, not on clouds</li>
-                                        <li><strong>Backup Option:</strong> Manual backup to external storage</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q5: What happens if the smartphone gets lost or damaged?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> We implemented:</p>
-                                    <ul style="margin-left: 20px; margin-top: 10px;">
-                                        <li><strong>Regular backup reminders</strong> to save data to Google Drive or SD card</li>
-                                        <li><strong>Multiple user accounts</strong> so losing one phone doesn't compromise all data</li>
-                                        <li><strong>Data export feature</strong> to download reports regularly</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 26: Q&A Functionality Questions -->
-            <div class="slide" id="slide26">
-                <div class="slide-header">
-                    <h1>Q&A Session</h1>
-                    <h2>Functionality Questions</h2>
-                </div>
-                <div class="slide-content">
-                    <div class="qa-container">
-                        <div class="qa-category">
-                            <h3>⚙️ System Functionality</h3>
-                            
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q6: How does real-time inventory tracking work?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> Every sale triggers an <strong>automatic stock deduction</strong>. When a cashier processes a sale:</p>
-                                    <ol style="margin-left: 20px; margin-top: 10px;">
-                                        <li>System checks current stock</li>
-                                        <li>Processes the sale</li>
-                                        <li>Automatically updates stock levels</li>
-                                        <li>If stock reaches minimum level, shows red alert</li>
-                                    </ol>
-                                </div>
-                            </div>
-
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q7: Can the system handle multiple cashiers?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> Our current version supports <strong>single-store, multi-user</strong> but on <strong>one device at a time</strong>. For multiple cashiers simultaneously:</p>
-                                    <ul style="margin-left: 20px; margin-top: 10px;">
-                                        <li>Designated sales smartphone at counter</li>
-                                        <li>All cashiers use same device with their login credentials</li>
-                                        <li>System tracks who processed each sale</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q8: How do you handle returns or refunds?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> Simple 3-step process:</p>
-                                    <ol style="margin-left: 20px; margin-top: 10px;">
-                                        <li>Find original transaction in "Sales History"</li>
-                                        <li>Select items to return</li>
-                                        <li>System automatically:
-                                            <ul style="margin-left: 20px;">
-                                                <li>Adjusts inventory (adds back returned items)</li>
-                                                <li>Processes refund amount</li>
-                                                <li>Generates return receipt</li>
-                                                <li>Updates financial records</li>
-                                            </ul>
-                                        </li>
-                                    </ol>
-                                </div>
-                            </div>
-
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q9: What types of reports can the owner generate?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> Four main report categories:</p>
-                                    <ul style="margin-left: 20px; margin-top: 10px;">
-                                        <li><strong>Sales Reports:</strong> Daily/Weekly/Monthly totals, top-selling items</li>
-                                        <li><strong>Inventory Reports:</strong> Current stock, low stock alerts, stock value</li>
-                                        <li><strong>Financial Reports:</strong> Profit/Loss, expenses, cash flow</li>
-                                        <li><strong>Customer Reports:</strong> Purchase history, frequent buyers</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q10: How does the system calculate profit?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> Automatic profit calculation using:</p>
-                                    <div style="background: #f0f8ff; padding: 15px; border-radius: 5px; margin: 10px 0; font-family: monospace;">
-                                        Profit = Selling Price - Cost Price
-                                    </div>
-                                    <p>Where:</p>
-                                    <ul style="margin-left: 20px;">
-                                        <li><strong>Selling Price:</strong> Price customer pays</li>
-                                        <li><strong>Cost Price:</strong> Price store paid supplier (entered during product setup)</li>
-                                        <li>System tracks both for every item sold</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 27: Q&A Business Impact -->
-            <div class="slide" id="slide27">
-                <div class="slide-header">
-                    <h1>Q&A Session</h1>
-                    <h2>Business & Impact Questions</h2>
-                </div>
-                <div class="slide-content">
-                    <div class="qa-container">
-                        <div class="qa-category">
-                            <h3>💼 Business Impact</h3>
-                            
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q11: How will this system specifically help JL Lapaz Hardware?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> Direct benefits:</p>
-                                    <ul style="margin-left: 20px; margin-top: 10px;">
-                                        <li><strong>Time Saving:</strong> Reduce sales processing from 5 to 2 minutes</li>
-                                        <li><strong>Error Elimination:</strong> No more calculation mistakes</li>
-                                        <li><strong>Stock Accuracy:</strong> Always know what's available</li>
-                                        <li><strong>Business Insight:</strong> Make decisions based on data, not guesswork</li>
-                                        <li><strong>Customer Satisfaction:</strong> Faster, more professional service</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q12: What is the estimated cost savings?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> We estimate:</p>
-                                    <ul style="margin-left: 20px; margin-top: 10px;">
-                                        <li><strong>Time Savings:</strong> 4 hours weekly × ₱50/hour = ₱200/week</li>
-                                        <li><strong>Error Reduction:</strong> Prevents ₱500-₱1,000 monthly in calculation errors</li>
-                                        <li><strong>Stock Optimization:</strong> Reduces overstocking by 20%</li>
-                                        <li><strong>Total Annual Savings:</strong> Approximately ₱15,000-₱20,000</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q13: How long will it take staff to learn the system?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> Maximum <strong>30 minutes training</strong> because:</p>
-                                    <ul style="margin-left: 20px; margin-top: 10px;">
-                                        <li>Interface mimics familiar smartphone apps</li>
-                                        <li>Uses common icons and gestures</li>
-                                        <li>Step-by-step guidance for each function</li>
-                                        <li>No technical knowledge required</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q14: What if the owner wants to expand to multiple branches?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> Current system is <strong>single-store focused</strong>, but designed with scalability:</p>
-                                    <ul style="margin-left: 20px; margin-top: 10px;">
-                                        <li>Database structure supports future multi-store expansion</li>
-                                        <li>Can develop cloud sync for version 2.0</li>
-                                        <li>Each branch can use separate devices with same system</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q15: How does this compare to existing POS systems?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> Our advantages:</p>
-                                    <ul style="margin-left: 20px; margin-top: 10px;">
-                                        <li><strong>Cost:</strong> Free vs ₱5,000-₱20,000 for commercial systems</li>
-                                        <li><strong>Simplicity:</strong> Designed for non-technical users</li>
-                                        <li><strong>Offline:</strong> Works without monthly internet fees</li>
-                                        <li><strong>Customization:</strong> Built specifically for hardware stores</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 28: Q&A Implementation -->
-            <div class="slide" id="slide28">
-                <div class="slide-header">
-                    <h1>Q&A Session</h1>
-                    <h2>Implementation Questions</h2>
-                </div>
-                <div class="slide-content">
-                    <div class="qa-container">
-                        <div class="qa-category">
-                            <h3>🚀 Implementation & Future</h3>
-                            
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q16: What are the minimum requirements for the smartphone?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> Basic requirements:</p>
-                                    <ul style="margin-left: 20px; margin-top: 10px;">
-                                        <li><strong>Android 8.0 or higher</strong></li>
-                                        <li><strong>2GB RAM minimum</strong></li>
-                                        <li><strong>500MB storage space</strong></li>
-                                        <li><strong>Optional:</strong> Bluetooth for receipt printing</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q17: How will data backup work?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> Three backup methods:</p>
-                                    <ul style="margin-left: 20px; margin-top: 10px;">
-                                        <li><strong>Auto-backup:</strong> Daily reminder to backup</li>
-                                        <li><strong>Cloud Backup:</strong> Manual upload to Google Drive</li>
-                                        <li><strong>Local Backup:</strong> Export to SD card or computer</li>
-                                        <li><strong>Report Export:</strong> Regular PDF reports emailed to owner</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q18: What happens during power outages?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> Perfect for power outages because:</p>
-                                    <ul style="margin-left: 20px; margin-top: 10px;">
-                                        <li>Smartphone battery lasts 8-10 hours</li>
-                                        <li>No internet required</li>
-                                        <li>Can use power bank for extended outages</li>
-                                        <li>All data saved locally</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q19: What features are planned for future versions?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> Future enhancements:</p>
-                                    <ul style="margin-left: 20px; margin-top: 10px;">
-                                        <li><strong>Barcode scanning</strong> for faster item entry</li>
-                                        <li><strong>Supplier management</strong> for automated ordering</li>
-                                        <li><strong>Customer loyalty program</strong> for repeat customers</li>
-                                        <li><strong>Multi-language support</strong> for wider adoption</li>
-                                        <li><strong>Cloud synchronization</strong> for data backup</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="qa-item">
-                                <div class="question">
-                                    <span>Q20: What's the single most important benefit?</span>
-                                    <span class="toggle-icon">+</span>
-                                </div>
-                                <div class="answer">
-                                    <p><strong>Answer:</strong> <strong>Peace of mind.</strong> The owner can:</p>
-                                    <ul style="margin-left: 20px; margin-top: 10px;">
-                                        <li>Know exact stock levels instantly</li>
-                                        <li>See accurate daily profits</li>
-                                        <li>Trust the system's calculations</li>
-                                        <li>Focus on growing the business instead of managing paperwork</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 29: Live Demo -->
-            <div class="slide" id="slide29">
-                <div class="slide-header">
-                    <h1>Live Demonstration</h1>
-                    <h2>See the System in Action</h2>
-                </div>
-                <div class="slide-content">
-                    <div style="text-align: center; margin-bottom: 30px;">
-                        <h3>Smartphone Application Demo</h3>
-                        <p>Let's walk through a typical sales transaction</p>
-                    </div>
-
-                    <div class="demo-phone">
-                        <div class="phone-screen">
-                            <div class="app-screen">
-                                <div class="app-header demo-step">
-                                    JL Hardware Management System
-                                    <div style="font-size: 12px;">Version 1.0</div>
-                                </div>
-                                
-                                <div id="demoStep1" class="demo-step" style="margin-top: 20px;">
-                                    <div class="app-button" onclick="nextDemoStep(1)">
-                                        🔑 Login as Cashier
-                                    </div>
-                                    <div class="app-button" onclick="nextDemoStep(1)">
-                                        📊 View Reports
-                                    </div>
-                                    <div class="app-button" onclick="nextDemoStep(1)">
-                                        📦 Check Inventory
-                                    </div>
-                                </div>
-
-                                <div id="demoStep2" style="display: none; margin-top: 20px;">
-                                    <div style="background: #f0f8ff; padding: 15px; border-radius: 8px;">
-                                        <h4>New Sale Transaction</h4>
-                                        <div style="margin-top: 10px;">
-                                            <div style="display: flex; justify-content: space-between;">
-                                                <span>Cement (1 bag)</span>
-                                                <span>₱250</span>
-                                            </div>
-                                            <div style="display: flex; justify-content: space-between; margin-top: 5px;">
-                                                <span>Nails (2kg)</span>
-                                                <span>₱100</span>
-                                            </div>
-                                            <div style="border-top: 1px solid #ccc; margin: 10px 0; padding-top: 10px;">
-                                                <div style="display: flex; justify-content: space-between; font-weight: bold;">
-                                                    <span>Total:</span>
-                                                    <span>₱350</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="app-button" onclick="nextDemoStep(2)" style="margin-top: 15px;">
-                                            ✅ Process Payment
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div id="demoStep3" style="display: none; margin-top: 20px;">
-                                    <div style="background: #e8f5e9; padding: 15px; border-radius: 8px;">
-                                        <h4>Payment Processed ✅</h4>
-                                        <div style="margin-top: 10px;">
-                                            <div style="display: flex; justify-content: space-between;">
-                                                <span>Amount Received:</span>
-                                                <span>₱500</span>
-                                            </div>
-                                            <div style="display: flex; justify-content: space-between; margin-top: 5px;">
-                                                <span>Change:</span>
-                                                <span style="color: green; font-weight: bold;">₱150</span>
-                                            </div>
-                                        </div>
-                                        <div style="margin-top: 15px; text-align: center;">
-                                            <div style="background: #1a2980; color: white; padding: 10px; border-radius: 5px;">
-                                                Receipt Printed 🖨️
-                                            </div>
-                                        </div>
-                                        <div class="app-button" onclick="nextDemoStep(3)" style="margin-top: 15px;">
-                                            🔄 Next Customer
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="text-align: center; margin-top: 30px;">
-                        <button class="nav-btn" onclick="resetDemo()">
-                            🔄 Reset Demo
-                        </button>
-                        <div style="margin-top: 20px; font-size: 14px; color: #666;">
-                            Click the buttons in the demo phone to proceed through the transaction
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 30: Conclusion -->
-            <div class="slide" id="slide30">
-                <div class="slide-header">
-                    <h1>Conclusion</h1>
-                    <h2>Transforming Hardware Store Operations</h2>
-                </div>
-                <div class="slide-content">
-                    <div style="text-align: center; margin-bottom: 30px;">
-                        <h3 style="color: #1a2980;">OUR SYSTEM DELIVERS:</h3>
-                    </div>
-
-                    <div class="feature-grid">
-                        <div class="feature-card">
-                            <h3>⚡ Efficiency</h3>
-                            <p>70% faster transactions compared to manual methods</p>
-                        </div>
-                        <div class="feature-card">
-                            <h3>🎯 Accuracy</h3>
-                            <p>Near-zero calculation errors with automated processing</p>
-                        </div>
-                        <div class="feature-card">
-                            <h3>📊 Insight</h3>
-                            <p>Real-time business intelligence for better decisions</p>
-                        </div>
-                        <div class="feature-card">
-                            <h3>🤝 Simplicity</h3>
-                            <p>Easy for anyone to use with minimal training</p>
-                        </div>
-                        <div class="feature-card">
-                            <h3>💰 Affordability</h3>
-                            <p>No cost implementation using existing smartphones</p>
-                        </div>
-                        <div class="feature-card">
-                            <h3>📈 Growth</h3>
-                            <p>Enables sustainable business expansion</p>
-                        </div>
-                    </div>
-
-                    <div style="background: #e8f4fd; padding: 25px; border-radius: 8px; margin-top: 30px;">
-                        <h3 style="color: #1a2980; text-align: center;">For JL Lapaz Hardware, This Means:</h3>
-                        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 20px;">
-                            <div style="text-align: center; min-width: 200px;">
-                                <div style="font-size: 2rem;">🚀</div>
-                                <h4>Better Daily Operations</h4>
-                            </div>
-                            <div style="text-align: center; min-width: 200px;">
-                                <div style="font-size: 2rem;">😊</div>
-                                <h4>Higher Customer Satisfaction</h4>
-                            </div>
-                            <div style="text-align: center; min-width: 200px;">
-                                <div style="font-size: 2rem;">📈</div>
-                                <h4>Increased Profitability</h4>
-                            </div>
-                            <div style="text-align: center; min-width: 200px;">
-                                <div style="font-size: 2rem;">🌱</div>
-                                <h4>Sustainable Business Growth</h4>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="text-align: center; margin-top: 40px;">
-                        <h2 style="color: #26d0ce;">Final Message</h2>
-                        <p style="font-size: 1.2rem; margin-top: 15px; line-height: 1.6;">
-                            "We're not just delivering software; we're delivering a brighter future for family businesses. 
-                            Empowering small business owners with tools previously available only to large companies."
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 31: Thank You -->
-            <div class="slide title-slide" id="slide31">
-                <div class="slide-header">
-                    <h1>Thank You!</h1>
-                    <h2>Questions & Discussion</h2>
-                </div>
-                <div class="slide-content">
-                    <div style="text-align: center; margin: 50px 0;">
-                        <div style="font-size: 4rem;">🙏</div>
-                        <h3 style="color: white; margin: 30px 0;">We appreciate your time and attention</h3>
+                    
+                    <div>
+                        <h3 class="module-title">3. Business Intelligence</h3>
+                        <ul class="objectives-list">
+                            <li>To generate daily, weekly, and monthly sales reports</li>
+                            <li>To provide profit analysis and revenue tracking</li>
+                            <li>To create inventory valuation reports</li>
+                        </ul>
                         
-                        <div style="background: rgba(255,255,255,0.2); padding: 30px; border-radius: 10px; max-width: 600px; margin: 0 auto;">
-                            <h4 style="color: white; margin-bottom: 20px;">Contact Information</h4>
-                            <div style="color: white; line-height: 1.8;">
-                                <p><strong>Project Lead:</strong> Jayvee Caringal</p>
-                                <p><strong>Technical Lead:</strong> Christian Lasponia</p>
-                                <p><strong>Documentation:</strong> Lenie Mariano</p>
-                                <p><strong>Project Documentation:</strong> Available upon request</p>
-                            </div>
-                        </div>
-
-                        <div style="margin-top: 50px;">
-                            <h4 style="color: white;">Special Thanks To:</h4>
-                            <p style="color: white; margin-top: 10px;">
-                                Our Panel Members, Faculty Advisers, and JL Lapaz Hardware Store
-                            </p>
-                        </div>
+                        <h3 class="module-title">4. Customer Service Enhancement</h3>
+                        <ul class="objectives-list">
+                            <li>To enable faster checkout processing</li>
+                            <li>To maintain customer purchase history</li>
+                            <li>To generate professional receipts and invoices</li>
+                        </ul>
                     </div>
                 </div>
             </div>
-
         </div>
-
-        <div class="controls">
-            <div class="presentation-title">
-                JL Lapaz Hardware Management System
+        
+        <!-- Slide 5: Data Security Objectives -->
+        <div class="slide" id="slide5">
+            <div class="slide-header">
+                <h1>DATA SECURITY OBJECTIVES</h1>
             </div>
+            
+            <div class="slide-content">
+                <h3 class="module-title">5. Data Security and Management</h3>
+                <ul class="objectives-list">
+                    <li>To secure business data through user authentication</li>
+                    <li>To implement regular automated data backups</li>
+                    <li>To maintain comprehensive audit trails of all transactions</li>
+                </ul>
+                
+                <div class="image-container">
+                    <img src="fc2.jpg" alt="Sales Transaction Flowchart" class="flowchart-img">
+                    <p>Sales Transaction Flowchart</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 6: Scope - Core Modules -->
+        <div class="slide" id="slide6">
+            <div class="slide-header">
+                <h1>SCOPE AND LIMITATIONS</h1>
+                <h2>Core Management Modules</h2>
+            </div>
+            
+            <div class="slide-content">
+                <div class="two-column">
+                    <div>
+                        <h3 class="module-title">A. PRODUCT MANAGEMENT</h3>
+                        <ul class="scope-list">
+                            <li>Add/Edit/Delete products</li>
+                            <li>Categorize items (Tools, Electrical, Plumbing, etc.)</li>
+                            <li>Set reorder levels and pricing</li>
+                            <li>Upload product images</li>
+                        </ul>
+                        
+                        <h3 class="module-title">B. INVENTORY CONTROL</h3>
+                        <ul class="scope-list">
+                            <li>Real-time stock level tracking</li>
+                            <li>Automatic deduction after sales</li>
+                            <li>Manual stock adjustments</li>
+                            <li>Stock movement history</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="module-title">C. SALES PROCESSING</h3>
+                        <ul class="scope-list">
+                            <li>Point-of-Sale (POS) interface</li>
+                            <li>Bill generation with tax calculation</li>
+                            <li>Receipt printing</li>
+                            <li>Return/Refund processing</li>
+                        </ul>
+                        
+                        <h3 class="module-title">D. REPORTING SYSTEM</h3>
+                        <ul class="scope-list">
+                            <li>Sales reports (daily, weekly, monthly)</li>
+                            <li>Inventory reports</li>
+                            <li>Profit/Loss statements</li>
+                            <li>Customer purchase history</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="image-container">
+                    <img src="fc3.jpg" alt="Inventory Management Flowchart" class="flowchart-img">
+                    <p>Inventory Management Flowchart</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 7: Scope - User & Customer Management -->
+        <div class="slide" id="slide7">
+            <div class="slide-header">
+                <h1>SCOPE: USER & CUSTOMER MANAGEMENT</h1>
+            </div>
+            
+            <div class="slide-content">
+                <div class="two-column">
+                    <div>
+                        <h3 class="module-title">2. User Management</h3>
+                        <ul class="scope-list">
+                            <li>Role-based access (Admin, Manager, Cashier)</li>
+                            <li>Login/logout with password protection</li>
+                            <li>User activity logs</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="module-title">3. Customer Management</h3>
+                        <ul class="scope-list">
+                            <li>Customer database maintenance</li>
+                            <li>Purchase history tracking</li>
+                            <li>Basic loyalty tracking</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 8: Limitations - Advanced Features -->
+        <div class="slide" id="slide8">
+            <div class="slide-header">
+                <h1>LIMITATIONS - ADVANCED FEATURES</h1>
+            </div>
+            
+            <div class="slide-content">
+                <h3 class="module-title">1. Advanced Features NOT Included:</h3>
+                <ul class="limitations-list">
+                    <li>NO online ordering or e-commerce website</li>
+                    <li>NO barcode scanning integration</li>
+                    <li>NO RFID inventory tracking</li>
+                    <li>NO supplier portal integration</li>
+                    <li>NO accounting system integration</li>
+                </ul>
+                
+                <div class="image-container">
+                    <img src="fc4.jpg" alt="Report Generation Flowchart" class="flowchart-img">
+                    <p>Report Generation Flowchart</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 9: Limitations - Technical -->
+        <div class="slide" id="slide9">
+            <div class="slide-header">
+                <h1>LIMITATIONS - TECHNICAL</h1>
+            </div>
+            
+            <div class="slide-content">
+                <h3 class="module-title">2. Technical Limitations:</h3>
+                <ul class="limitations-list">
+                    <li>Single-store operation only (no multi-branch support)</li>
+                    <li>No cloud synchronization or backup</li>
+                    <li>No real-time online payment processing</li>
+                    <li>No API integration with external systems</li>
+                    <li>Offline operation only (no internet-dependent features)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 10: Limitations - Business -->
+        <div class="slide" id="slide10">
+            <div class="slide-header">
+                <h1>LIMITATIONS - BUSINESS</h1>
+            </div>
+            
+            <div class="slide-content">
+                <h3 class="module-title">3. Business Limitations:</h3>
+                <ul class="limitations-list">
+                    <li>No rental equipment management</li>
+                    <li>No project/quotation management</li>
+                    <li>No delivery tracking system</li>
+                </ul>
+                
+                <div class="image-container">
+                    <img src="logo.jpg" alt="JL Lapaz Hardware Logo" class="logo-img">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 11: Flowcharts -->
+        <div class="slide" id="slide11">
+            <div class="slide-header">
+                <h1>PROPOSED SYSTEM FLOWCHARTS</h1>
+            </div>
+            
+            <div class="slide-content">
+                <div class="two-column">
+                    <div class="image-container">
+                        <img src="fc1.jpg" alt="Main System Flowchart" class="flowchart-img">
+                        <p>1. MAIN SYSTEM FLOW</p>
+                    </div>
+                    
+                    <div class="image-container">
+                        <img src="fc2.jpg" alt="Sales Transaction Flowchart" class="flowchart-img">
+                        <p>2. SALES TRANSACTION FLOW</p>
+                    </div>
+                </div>
+                
+                <div class="two-column">
+                    <div class="image-container">
+                        <img src="fc3.jpg" alt="Inventory Management Flowchart" class="flowchart-img">
+                        <p>3. INVENTORY MANAGEMENT FLOW</p>
+                    </div>
+                    
+                    <div class="image-container">
+                        <img src="fc4.jpg" alt="Report Generation Flowchart" class="flowchart-img">
+                        <p>4. REPORT GENERATION FLOW</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 12: Thank You -->
+        <div class="slide" id="slide12">
+            <div class="slide-header">
+                <h1>THANK YOU</h1>
+                <h2>Management System of JL Lapaz Hardware</h2>
+            </div>
+            
+            <div class="slide-content">
+                <div style="text-align: center; margin-top: 100px;">
+                    <img src="logo.jpg" alt="JL Lapaz Hardware Logo" class="logo-img">
+                    <h2 style="margin-top: 30px; color: #2c5aa0;">Questions?</h2>
+                    <p style="margin-top: 20px; font-size: 1.2rem;">Presented by the JL Lapaz Hardware Management Team</p>
+                    <p style="margin-top: 10px; color: #666;">January 2026</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" disabled>Previous</button>
             <div class="slide-counter">
-                <button class="nav-btn" id="prevBtn">← Previous</button>
-                <span id="currentSlide">1</span> / <span id="totalSlides">31</span>
-                <button class="nav-btn" id="nextBtn">Next →</button>
+                <span id="currentSlide">1</span> / <span id="totalSlides">12</span>
             </div>
-            <div>
-                <button class="nav-btn" id="fullscreenBtn">Fullscreen</button>
-            </div>
+            <button class="nav-btn" id="nextBtn">Next</button>
         </div>
     </div>
 
     <script>
-        // Slides management
+        // Slide management
         const slides = document.querySelectorAll('.slide');
         const totalSlides = slides.length;
         let currentSlide = 0;
-
+        
         // Update slide counter
-        function updateSlideCounter() {
-            document.getElementById('currentSlide').textContent = currentSlide + 1;
-            document.getElementById('totalSlides').textContent = totalSlides;
-        }
-
-        // Show specific slide
+        document.getElementById('totalSlides').textContent = totalSlides;
+        
+        // Navigation buttons
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        
+        // Function to show a specific slide
         function showSlide(index) {
             // Hide all slides
             slides.forEach(slide => {
                 slide.classList.remove('active');
             });
             
-            // Show current slide
+            // Show the current slide
             slides[index].classList.add('active');
+            
+            // Update current slide counter
+            document.getElementById('currentSlide').textContent = index + 1;
+            
+            // Update button states
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === totalSlides - 1;
+            
+            // Update currentSlide variable
             currentSlide = index;
-            updateSlideCounter();
         }
-
-        // Next slide
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            if (currentSlide < totalSlides - 1) {
-                showSlide(currentSlide + 1);
-            }
-        });
-
-        // Previous slide
-        document.getElementById('prevBtn').addEventListener('click', () => {
+        
+        // Event listeners for navigation buttons
+        prevBtn.addEventListener('click', () => {
             if (currentSlide > 0) {
                 showSlide(currentSlide - 1);
             }
         });
-
+        
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        });
+        
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ') {
-                if (currentSlide < totalSlides - 1) {
-                    showSlide(currentSlide + 1);
-                }
-            } else if (e.key === 'ArrowLeft') {
-                if (currentSlide > 0) {
-                    showSlide(currentSlide - 1);
-                }
-            } else if (e.key === 'Home') {
-                showSlide(0);
-            } else if (e.key === 'End') {
-                showSlide(totalSlides - 1);
+            if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            } else if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
             }
         });
-
-        // Fullscreen toggle
-        document.getElementById('fullscreenBtn').addEventListener('click', () => {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
-                });
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
-            }
-        });
-
-        // Q&A Toggle functionality
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('question') || e.target.closest('.question')) {
-                const question = e.target.closest('.question');
-                const answer = question.nextElementSibling;
-                const toggleIcon = question.querySelector('.toggle-icon');
-                
-                // Toggle answer visibility
-                answer.classList.toggle('show');
-                
-                // Update toggle icon
-                if (answer.classList.contains('show')) {
-                    toggleIcon.textContent = '−';
-                } else {
-                    toggleIcon.textContent = '+';
-                }
-            }
-        });
-
-        // Demo functionality
-        let demoStep = 1;
         
-        function nextDemoStep(step) {
-            if (step === 1) {
-                document.getElementById('demoStep1').style.display = 'none';
-                document.getElementById('demoStep2').style.display = 'block';
-                demoStep = 2;
-            } else if (step === 2) {
-                document.getElementById('demoStep2').style.display = 'none';
-                document.getElementById('demoStep3').style.display = 'block';
-                demoStep = 3;
-            } else if (step === 3) {
-                resetDemo();
-            }
-        }
-
-        function resetDemo() {
-            document.getElementById('demoStep1').style.display = 'block';
-            document.getElementById('demoStep2').style.display = 'none';
-            document.getElementById('demoStep3').style.display = 'none';
-            demoStep = 1;
-        }
-
-        // Initialize
-        updateSlideCounter();
-
-        // Add slide numbers to slides
-        slides.forEach((slide, index) => {
-            const slideNumber = document.createElement('div');
-            slideNumber.style.position = 'absolute';
-            slideNumber.style.bottom = '10px';
-            slideNumber.style.right = '20px';
-            slideNumber.style.color = '#666';
-            slideNumber.style.fontSize = '14px';
-            slideNumber.textContent = `Slide ${index + 1} of ${totalSlides}`;
-            slide.appendChild(slideNumber);
-        });
-
-        // Auto-advance for demo slide
-        let demoInterval;
+        // Initialize the first slide
+        showSlide(0);
         
-        function startDemoAutoAdvance() {
-            if (demoInterval) clearInterval(demoInterval);
-            
-            demoInterval = setInterval(() => {
-                const activeSlide = document.querySelector('.slide.active');
-                if (activeSlide && activeSlide.id === 'slide29') {
-                    nextDemoStep(demoStep);
-                }
-            }, 3000);
-        }
-
-        // Start auto-advance when demo slide is active
-        const observer = new MutationObserver(() => {
-            const activeSlide = document.querySelector('.slide.active');
-            if (activeSlide && activeSlide.id === 'slide29') {
-                startDemoAutoAdvance();
-            } else {
-                if (demoInterval) clearInterval(demoInterval);
-            }
-        });
-
-        observer.observe(document.querySelector('.slides-container'), {
-            childList: true,
-            subtree: true
-        });
-
-        // Open all Q&A answers when on Q&A slides (optional feature)
-        function toggleAllQA(show) {
-            const answers = document.querySelectorAll('.answer');
-            const toggleIcons = document.querySelectorAll('.toggle-icon');
-            
-            answers.forEach(answer => {
-                if (show) {
-                    answer.classList.add('show');
-                } else {
-                    answer.classList.remove('show');
-                }
+        // Handle missing images
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.onerror = function() {
+                    // Replace broken image with placeholder
+                    if (this.src.includes('logo.jpg')) {
+                        this.src = 'https://via.placeholder.com/300x150/2c5aa0/ffffff?text=JL+Lapaz+Hardware+Logo';
+                    } else if (this.src.includes('fc1.jpg')) {
+                        this.src = 'https://via.placeholder.com/600x400/4a7cc8/ffffff?text=Main+System+Flowchart';
+                    } else if (this.src.includes('fc2.jpg')) {
+                        this.src = 'https://via.placeholder.com/600x400/4a7cc8/ffffff?text=Sales+Transaction+Flowchart';
+                    } else if (this.src.includes('fc3.jpg')) {
+                        this.src = 'https://via.placeholder.com/600x400/4a7cc8/ffffff?text=Inventory+Management+Flowchart';
+                    } else if (this.src.includes('fc4.jpg')) {
+                        this.src = 'https://via.placeholder.com/600x400/4a7cc8/ffffff?text=Report+Generation+Flowchart';
+                    }
+                };
             });
-            
-            toggleIcons.forEach(icon => {
-                icon.textContent = show ? '−' : '+';
-            });
-        }
-
-        // Optional: Add a button to show/hide all answers
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'a' && e.ctrlKey) {
-                const activeSlide = document.querySelector('.slide.active');
-                if (activeSlide.id.startsWith('slide2')) { // Q&A slides
-                    const anyAnswerOpen = document.querySelector('.answer.show');
-                    toggleAllQA(!anyAnswerOpen);
-                }
-            }
         });
-
-        // Print-friendly version
-        window.addEventListener('beforeprint', () => {
-            // Show all answers when printing
-            toggleAllQA(true);
-        });
-
-        // Initialize demo
-        resetDemo();
     </script>
 </body>
 </html>
